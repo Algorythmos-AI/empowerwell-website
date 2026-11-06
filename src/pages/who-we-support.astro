@@ -8,166 +8,139 @@ import Badge from "../components/ui/Badge.astro";
 import Button from "../components/ui/Button.astro";
 import { SITE } from "../content/site";
 
+// Focus groups from the client's business plan: mainly intellectual disability and autism,
+// with low to medium support needs. Don't add high-intensity supports (not a registration group).
 const participantGroups = [
   {
-    title: "Autism & Neurodivergent Individuals",
-    description: "Support workers who understand sensory sensitivities, predictable routines, and positive communication strategies to foster independence at home and in public spaces.",
+    id: "autism",
+    title: "Autistic people",
+    description: "Support workers who understand routines, sensory needs and clear communication, at home and out in the community.",
     features: [
-      "Consistent routine building and sensory-friendly home adaptations",
-      "Support with social outings and hobby exploration",
-      "Patience, empathy, and active listening without judgment",
-      "Skill coaching for independent travel and budgeting",
+      "Building steady, predictable routines",
+      "Support for outings and trying new hobbies",
+      "Patient, calm support without judgement",
+      "Learning to travel and manage money",
     ],
   },
   {
-    title: "Intellectual & Developmental Disabilities",
-    description: "Empowering participants to build lifelong daily living skills, form meaningful friendships, and take active control of their everyday decisions.",
+    id: "intellectual-disability",
+    title: "People with intellectual disability",
+    description: "Support to learn everyday skills, make friends and make your own decisions.",
     features: [
-      "Clear, easy-to-follow visual cues and step-by-step coaching",
-      "Assistance with personal care and meal preparation",
-      "Supported community participation and group activities",
-      "Goal setting and milestone celebration with family",
+      "Clear, step-by-step help, with pictures if that helps you",
+      "Help with personal care and cooking",
+      "Joining community and group activities",
+      "Setting goals and celebrating them with your family",
     ],
   },
   {
-    title: "Ageing & Seniors Living with Disability",
-    description: "Gentle, compassionate in-home care designed to keep seniors living comfortably, safely, and with dignity in their familiar home environment.",
+    id: "ageing",
+    title: "NDIS participants who are getting older",
+    description: "Support to stay comfortable, safe and independent at home as your needs change.",
     features: [
-      "Assistance with personal hygiene and gentle hoist/mobility transfers",
-      "Medication reminders and accompaniment to specialist visits",
-      "Household tasks, meal cooking, and laundry support",
-      "Warm companionship to prevent loneliness and isolation",
+      "Help with personal care and moving around safely",
+      "Reminders for medication and help getting to appointments",
+      "Help with household jobs and meals",
+      "Company and support to stay connected",
     ],
   },
-  {
-    title: "Complex Health & High-Intensity Support Needs",
-    description: "Specialised, around-the-clock SIL and personal care delivered by experienced support workers trained in complex physical and behavioural support plans.",
-    features: [
-      "Complex bowel care, enteral feeding, and catheter support",
-      "Positive Behaviour Support (PBS) plan implementation",
-      "24/7 on-site and active overnight sleepover staff",
-      "Close coordination with your allied health and medical teams",
-    ],
-  },
+];
+
+const planTypes = [
+  { name: "Self-managed", body: "You pay us and claim the money back. We give you clear invoices for your claims." },
+  { name: "Plan-managed", body: "We send our invoices to your plan manager, who pays us from your NDIS plan." },
+  { name: "Agency-managed (NDIA)", body: "We claim payment from the NDIA. Only registered providers like us can do this." },
 ];
 ---
 
 <BaseLayout meta={PAGES.whoWeSupport}>
-  {/* Hero */}
   <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
     <Container>
       <div class="max-w-3xl">
-        <Badge variant="tint" class="mb-4">Person-Centred Focus</Badge>
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">
-          Every Journey is Unique. We Meet You Exactly Where You Are.
-        </h1>
+        <Badge variant="tint" class="mb-4">Who we support</Badge>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">Support That Starts With You</h1>
         <p class="text-xl text-ink leading-relaxed">
-          At Empowerwell Support, we work collaboratively with participants, families, carers, and Support Coordinators to create warm, stable support environments that celebrate individuality.
+          We work with you, your family, your carers and your support coordinator to build support that fits who you are.
         </p>
       </div>
     </Container>
   </Section>
 
-  {/* Participant Focus Groups */}
   <Section variant="tint">
     <Container>
       <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-        <Badge variant="purple" class="mb-3">Who We Walk Beside</Badge>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">
-          Specialised Support Across Diverse Lived Experiences
-        </h2>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">People We Support</h2>
         <p class="text-lg text-ink">
-          Our team is trained to deliver empathetic, respectful care tailored to your exact communication style and support requirements.
+          We mainly support people with low to medium support needs. If you are not sure we are the right fit, call us and ask.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <ul class="grid grid-cols-1 lg:grid-cols-3 gap-8" role="list">
         {
           participantGroups.map((group) => (
-            <Card variant="white" padding="lg" class="border border-green-100 flex flex-col justify-between">
-              <div class="space-y-4">
-                <h3 class="text-2xl font-bold text-purple-700">
-                  {group.title}
-                </h3>
-                <p class="text-base text-ink leading-relaxed">
-                  {group.description}
-                </p>
-
-                <div class="pt-2">
-                  <p class="text-xs font-bold text-green-900 uppercase tracking-wider mb-2">
-                    How We Help:
-                  </p>
-                  <ul class="space-y-2 text-sm text-ink">
-                    {group.features.map((feat) => (
-                      <li class="flex items-start gap-2">
-                        <span class="text-green-600 font-bold shrink-0 mt-0.5">✓</span>
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+            <li>
+              <Card variant="white" padding="lg" class="h-full border border-green-100 flex flex-col justify-between">
+                <div class="space-y-4">
+                  <h3 class="text-2xl font-bold text-purple-700">{group.title}</h3>
+                  <p class="text-base text-ink leading-relaxed">{group.description}</p>
+                  <div class="pt-1">
+                    <h4 class="text-base font-bold text-green-900 mb-2">How we help:</h4>
+                    <ul class="space-y-2 text-base text-ink" role="list">
+                      {group.features.map((feat) => (
+                        <li class="flex items-start gap-2">
+                          <svg class="w-5 h-5 mt-0.5 shrink-0 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 6 9 17l-5-5"></path>
+                          </svg>
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-
-              <div class="pt-6 mt-6 border-t border-green-50">
-                <Button href="/contact" variant="outline" size="sm" class="w-full">
-                  Discuss Support for {group.title.split("&")[0].trim()}
-                </Button>
-              </div>
-            </Card>
+                <div class="pt-6 mt-6 border-t border-green-100">
+                  <Button href="/contact#enquiry-form" variant="outline" size="md" class="w-full">
+                    Talk to us<span class="sr-only"> about support for {group.title.toLowerCase()}</span>
+                  </Button>
+                </div>
+              </Card>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </Container>
   </Section>
 
-  {/* Plan Management Flexibility */}
   <Section variant="surface">
     <Container>
       <div class="max-w-4xl mx-auto space-y-8">
         <div class="text-center">
-          <Badge variant="green" class="mb-3">All Plan Types Welcome</Badge>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">
-            We Welcome Self, Plan, and NDIA-Managed Participants
-          </h2>
+          <Badge variant="green" class="mb-3">All plan types welcome</Badge>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">Self, Plan and Agency-Managed Plans</h2>
           <p class="text-lg text-ink">
-            Because Empowerwell Support is a Registered NDIS Provider (Registration {SITE.ndisRegistration}), you have complete freedom to engage our services no matter how your NDIS funding is administered.
+            We are a registered NDIS provider ({SITE.ndisRegistration}), so we can support you however your plan is managed.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          <Card variant="tint" padding="md" class="text-center space-y-3">
-            <h3 class="text-xl font-bold text-green-900">Plan-Managed</h3>
-            <p class="text-sm text-ink leading-relaxed">
-              We send our itemised invoices straight to your nominated Plan Manager. Zero out-of-pocket costs and zero paperwork stress for you.
-            </p>
-          </Card>
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4" role="list">
+          {
+            planTypes.map((plan) => (
+              <li>
+                <Card variant="tint" padding="md" class="h-full text-center space-y-3">
+                  <h3 class="text-xl font-bold text-green-900">{plan.name}</h3>
+                  <p class="text-base text-ink leading-relaxed">{plan.body}</p>
+                </Card>
+              </li>
+            ))
+          }
+        </ul>
 
-          <Card variant="tint" padding="md" class="text-center space-y-3">
-            <h3 class="text-xl font-bold text-purple-700">Self-Managed</h3>
-            <p class="text-sm text-ink leading-relaxed">
-              Enjoy total control over your schedule and rates. We provide simple, NDIS-compliant receipts for fast claim reimbursement through the myplace portal.
-            </p>
-          </Card>
-
-          <Card variant="tint" padding="md" class="text-center space-y-3">
-            <h3 class="text-xl font-bold text-green-900">NDIA-Managed</h3>
-            <p class="text-sm text-ink leading-relaxed">
-              We claim directly through the NDIA portal (PRODA). Only registered providers like Empowerwell Support can support agency-managed participants.
-            </p>
-          </Card>
-        </div>
-
-        <div class="p-6 rounded-[12px] bg-purple-100 border border-purple-200 text-center space-y-3">
-          <p class="text-lg font-bold text-purple-900">
-            Are you a Support Coordinator or Local Area Coordinator (LAC)?
-          </p>
-          <p class="text-sm text-ink max-w-2xl mx-auto">
-            We work closely with coordinators across Western Sydney to provide prompt intake assessments, capacity updates, and regular progress reports.
+        <div class="p-6 rounded-[12px] bg-purple-50 border border-purple-200 text-center space-y-3">
+          <h2 class="text-xl font-bold text-purple-900">Are you a support coordinator or Local Area Coordinator (LAC)?</h2>
+          <p class="text-base text-ink max-w-2xl mx-auto">
+            Send us a referral and we will contact you to talk about the participant's needs and goals.
           </p>
           <div class="pt-2">
-            <Button href="/contact" variant="secondary" size="md">
-              Submit a Participant Referral
-            </Button>
+            <Button href="/contact#enquiry-form" variant="primary" size="md">Make a Referral</Button>
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default defineConfig(
     },
   },
   {
-    files: ["scripts/**/*.{js,mjs}", "*.config.{js,mjs,ts}"],
+    files: ["scripts/**/*.{js,mjs}", "*.config.{js,mjs,ts}", "site-url.mjs"],
     languageOptions: { globals: globals.node },
   },
   {
@@ -32,8 +32,8 @@ export default defineConfig(
     // list-style is removed (Tailwind preflight does this), so the explicit role is not redundant.
     files: ["**/*.astro", "**/*.tsx"],
     rules: {
-      "astro/jsx-a11y/no-redundant-roles": ["error", { ul: ["list"] }],
-      "jsx-a11y/no-redundant-roles": ["error", { ul: ["list"] }],
+      "astro/jsx-a11y/no-redundant-roles": ["error", { ul: ["list"], ol: ["list"] }],
+      "jsx-a11y/no-redundant-roles": ["error", { ul: ["list"], ol: ["list"] }],
     },
   },
   {

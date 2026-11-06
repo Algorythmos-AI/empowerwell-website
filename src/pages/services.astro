@@ -11,108 +11,93 @@ import { SERVICES } from "../content/services";
 ---
 
 <BaseLayout meta={PAGES.services}>
-  {/* Services Hero */}
   <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
     <Container>
       <div class="max-w-3xl">
-        <Badge variant="tint" class="mb-4">11 Core NDIS Supports</Badge>
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">
-          Comprehensive, Tailored Supports for Your Independence
-        </h1>
+        <Badge variant="tint" class="mb-4">{SERVICES.length} registered NDIS supports</Badge>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">Our NDIS Services</h1>
         <p class="text-xl text-ink leading-relaxed">
-          Every support service at Empowerwell is customized around your routine, goals, and cultural preferences. We operate 24 hours a day, 7 days a week across Greater Sydney and regional NSW.
+          We are registered with the NDIS Quality and Safeguards Commission to provide these {SERVICES.length} supports. Each one is
+          planned around your routine, your goals and your culture.
         </p>
       </div>
+
+      <nav aria-labelledby="service-index-heading" class="mt-8 max-w-4xl">
+        <h2 id="service-index-heading" class="text-lg font-bold text-green-900 mb-3">Jump to a service</h2>
+        <ul class="flex flex-wrap gap-2" role="list">
+          {
+            SERVICES.map((service) => (
+              <li>
+                <a
+                  href={`#${service.slug}`}
+                  class="inline-flex items-center min-h-[44px] px-4 rounded-full bg-white border border-green-200 text-base font-bold text-ink hover:border-purple-700 hover:text-purple-700 transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
+                >
+                  {service.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </Container>
   </Section>
 
-  {/* Services Grid */}
   <Section variant="tint">
     <Container>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-8" role="list">
         {
-          SERVICES.map((service, index) => (
-            <Card
-              variant="white"
-              padding="lg"
-              class="flex flex-col justify-between hover:shadow-soft-lg transition-all border border-green-100"
-            >
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div class="w-12 h-12 rounded-full bg-surface-tint border border-green-200 flex items-center justify-center text-green-900 font-bold">
-                    <span class="text-base font-heading font-extrabold text-green-900">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+          SERVICES.map((service) => (
+            <li id={service.slug}>
+              <Card variant="white" padding="lg" class="h-full flex flex-col justify-between border border-green-100">
+                <div class="space-y-4">
+                  <h2 class="text-2xl font-bold text-ink">{service.title}</h2>
+                  <p class="text-lg text-ink leading-relaxed">{service.shortDescription}</p>
+                  <p class="text-base text-ink leading-relaxed">{service.fullDescription}</p>
+                  <div class="pt-1">
+                    <h3 class="text-base font-bold text-green-900 mb-2">This can include:</h3>
+                    <ul class="space-y-2 text-base text-ink" role="list">
+                      {service.features.map((feat) => (
+                        <li class="flex items-start gap-2">
+                          <svg class="w-5 h-5 mt-0.5 shrink-0 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 6 9 17l-5-5"></path>
+                          </svg>
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  {service.isHighlight && (
-                    <Badge variant="lime" class="text-xs">
-                      Popular Support
-                    </Badge>
-                  )}
+                  <p class="text-sm text-muted">NDIS registration group: {service.ndisGroup}</p>
                 </div>
 
-                <h2 class="text-2xl font-bold text-ink">
-                  {service.title}
-                </h2>
-
-                <p class="text-base text-muted leading-relaxed">
-                  {service.shortDescription}
-                </p>
-
-                <p class="text-sm text-ink leading-relaxed pt-2">
-                  {service.fullDescription}
-                </p>
-
-                <div class="pt-2">
-                  <p class="text-xs font-bold text-green-900 uppercase tracking-wider mb-2">
-                    Key Inclusions:
-                  </p>
-                  <ul class="space-y-1.5 text-xs sm:text-sm text-ink">
-                    {service.features.map((feat) => (
-                      <li class="flex items-start gap-2">
-                        <span class="text-green-600 font-bold shrink-0">✓</span>
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div class="pt-6 mt-6 border-t border-green-100">
+                  <Button
+                    href={`/contact?service=${encodeURIComponent(service.slug)}#enquiry-form`}
+                    variant="outline"
+                    size="md"
+                    class="w-full"
+                  >
+                    Ask about this service<span class="sr-only">: {service.title}</span>
+                  </Button>
                 </div>
-              </div>
-
-              <div class="pt-6 mt-6 border-t border-green-100">
-                <Button
-                  href={`/contact?service=${encodeURIComponent(service.slug)}`}
-                  variant="outline"
-                  size="sm"
-                  class="w-full text-center"
-                >
-                  Enquire about {service.title}
-                </Button>
-              </div>
-            </Card>
+              </Card>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </Container>
   </Section>
 
-  {/* Service Area & Availability Note */}
   <Section variant="surface">
     <Container>
-      <div class="p-8 sm:p-12 rounded-[16px] bg-surface-tint border border-green-200 max-w-4xl mx-auto space-y-6 text-center">
-        <Badge variant="green">Service Coverage</Badge>
-        <h2 class="text-3xl font-extrabold text-green-900">
-          Servicing Western Sydney & Regional Communities
-        </h2>
+      <div class="p-8 sm:p-12 rounded-[12px] bg-surface-tint border border-green-200 max-w-4xl mx-auto space-y-6 text-center">
+        <Badge variant="green">Where we work</Badge>
+        <h2 class="text-3xl font-extrabold text-green-900">Supporting people across {SITE.serviceAreas}</h2>
         <p class="text-lg text-ink leading-relaxed max-w-2xl mx-auto">
-          We actively provide daily and 24/7 SIL supports in Blacktown, Penrith, Parramatta, Dharruk, Liverpool, Campbelltown, and throughout regional New South Wales.
+          We are based in {SITE.suburb}. {SITE.supportHours}. Call us to check if we can support you where you live.
         </p>
         <div class="pt-2 flex flex-wrap justify-center gap-4">
-          <Button href="/contact" variant="primary" size="md">
-            Check Service Availability in Your Suburb
-          </Button>
-          <Button href={SITE.phoneHref} variant="ghost" size="md">
-            Call Our Intake Team ({SITE.phone})
-          </Button>
+          <Button href={SITE.phoneHref} variant="primary" size="md">Call {SITE.phone}</Button>
+          <Button href="/contact#enquiry-form" variant="outline" size="md">Send us a question</Button>
         </div>
       </div>
     </Container>

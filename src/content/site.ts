@@ -37,28 +37,31 @@ export const SITE = {
   phoneLabel: "Call or text",
   email,
   emailHref: `mailto:${email}`,
-  websiteUrl: "https://empowerwell.com.au",
+  // Public origin from astro.config (site-url.mjs): the Vercel production domain, or the custom domain once attached.
+  websiteUrl: ((import.meta.env.SITE as string | undefined) ?? "https://empowerwell.com.au").replace(/\/$/, ""),
   suburb: "Dharruk",
   state: "NSW",
   postcode: "2770",
   country: "Australia",
-  serviceAreas: "Western Sydney, Greater Sydney and regional NSW",
+  serviceAreas: "Greater Sydney and regional NSW",
 
   // Operating hours
-  officeHours: "Monday to Friday: 9:00 am – 6:00 pm",
-  supportHours: "Support services available 24 hours a day, 7 days a week",
+  // Days not yet confirmed by the client (brief gives hours only).
+  officeHours: "9:00 am – 6:00 pm",
+  supportHours: "Supports can be arranged 24 hours a day, 7 days a week, if you need them",
 
   // Core statements
+  // Mission and vision: client's business plan wording (Rev.2, 20 Apr 2026), verbatim.
   mission:
-    "To empower, encourage and enable people who are ageing or living with disability to enhance their quality of life with dignity and respect, through holistic, person-centred care.",
+    "To empower, encourage and enable people who are ageing or living with disability to enhance their quality of life with dignity and respect; to meet and exceed stakeholders' expectations; and to provide care focused on a holistic view of each person.",
   vision:
-    "A resilient, empowered community supporting people with disability to live a great life with choice.",
+    "A resilient, empowered community, working in partnership to support people with disability to live a great life with choice.",
 
   acknowledgementOfCountry:
     "We acknowledge the Traditional Custodians of the land on which we live and work, and pay our deep respects to Elders past and present. We celebrate the ongoing culture and connection of First Nations peoples to Australian land, waters, and community.",
 
   footerBlurb:
-    "Delivering compassionate, person-centred disability support and SIL services across Western Sydney and regional NSW.",
+    "Person-centred NDIS supports across Greater Sydney and regional NSW.",
 
   // Social profiles: null until the client supplies verified URLs. Components render only non-null entries.
   socials: {
@@ -67,10 +70,16 @@ export const SITE = {
     linkedin: null as string | null,
   },
 
-  // External regulator links
+  // External regulator links (checked 2026-11-07)
   ndisCommissionUrl: "https://www.ndiscommission.gov.au",
+  ndisCommissionComplaintsUrl: "https://www.ndiscommission.gov.au/complaints",
+  ndisProviderRegisterUrl: "https://www.ndiscommission.gov.au/provider-registration/find-registered-provider",
   ndisCommissionPhone: "1800 035 544",
   ndisCommissionPhoneHref: "tel:1800035544",
+  advocacyUrl: "https://www.disabilitygateway.gov.au/legal/advocacy",
+  oaicComplaintsUrl: "https://www.oaic.gov.au/privacy/privacy-complaints",
+  oaicPhone: "1300 363 992",
+  oaicPhoneHref: "tel:1300363992",
 
   // Form submission endpoint (Formspree / Web3Forms / custom). Empty = mailto fallback.
   formEndpoint: (import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined) || "",
@@ -100,11 +109,51 @@ export const BRAND_COLORS = {
   background: "#FAFAF7", // --color-surface
 };
 
+/**
+ * Independent help and access services shown on the contact, feedback and privacy pages.
+ * Public national numbers; re-check them yearly.
+ */
+export const HELP_CONTACTS = {
+  heading: "Need help now, or help to talk to us?",
+  items: [
+    {
+      name: "Emergency",
+      detail: "If someone is in danger or needs urgent medical help, call Triple Zero.",
+      phone: "000",
+      href: "tel:000",
+    },
+    {
+      name: "National Disability Abuse and Neglect Hotline",
+      detail: "Free, confidential help to report abuse or neglect of a person with disability.",
+      phone: "1800 880 052",
+      href: "tel:1800880052",
+    },
+    {
+      name: "NDIS Quality and Safeguards Commission",
+      detail: "Make a complaint about any NDIS provider. You can complain at any time, and you can stay anonymous.",
+      phone: "1800 035 544",
+      href: "tel:1800035544",
+    },
+    {
+      name: "Translating and Interpreting Service (TIS National)",
+      detail: "Need an interpreter? Call TIS and ask them to call us.",
+      phone: "131 450",
+      href: "tel:131450",
+    },
+    {
+      name: "National Relay Service",
+      detail: "If you are deaf, or find it hard hearing or speaking, call the NRS and ask for our number.",
+      phone: "1300 555 727",
+      href: "tel:1300555727",
+    },
+  ],
+};
+
 /** Primary navigation (header, mobile menu, no-JS fallback). */
 export const NAV: NavLink[] = [
   { href: "/services", label: "Services" },
   { href: "/who-we-support", label: "Who We Support" },
-  { href: "/ndis-info", label: "NDIS Guide & FAQs" },
+  { href: "/ndis-info", label: "NDIS FAQs" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
 ];
@@ -120,8 +169,8 @@ export const FOOTER = {
     { href: "/", label: "Home" },
     { href: "/services", label: "Our 11 Services" },
     { href: "/who-we-support", label: "Who We Support" },
-    { href: "/ndis-info", label: "NDIS Info & FAQs" },
-    { href: "/about", label: "About Empowerwell" },
+    { href: "/ndis-info", label: "NDIS FAQs" },
+    { href: "/about", label: "About Us" },
     { href: "/contact", label: "Make a Referral / Contact" },
   ] satisfies NavLink[],
   contactHeading: "Get in Touch",
@@ -129,28 +178,24 @@ export const FOOTER = {
   safetyBlurb:
     "Your voice and safety matter. We welcome all compliments, suggestions, and complaints to continually improve our supports.",
   safetyLinks: [
-    { href: "/feedback", label: "Feedback & Complaints Procedure" },
-    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/feedback", label: "Feedback & Complaints" },
   ] satisfies NavLink[],
-  legal: [
-    { href: "/privacy", label: "Privacy Policy" },
-    { href: "/feedback", label: "NDIS Safeguards" },
-    { href: "/sitemap-index.xml", label: "Sitemap" },
-  ] satisfies NavLink[],
+  registerLabel: "Check our registration on the NDIS Provider Register",
+  legal: [{ href: "/privacy", label: "Privacy Policy" }] satisfies NavLink[],
 };
 
 export const TEAM: TeamMember[] = [
   {
     name: "Aiwen Kuel",
-    role: "Director & Support Specialist",
+    role: "Director",
     bio: "Passionate about building inclusive communities and ensuring every person with disability has the voice, choice, and dedicated guidance they deserve.",
     image: "/images/team-aiwen-kuel.svg",
     imageAlt: "Illustrated placeholder portrait for Aiwen Kuel, Director of Empowerwell Support",
   },
   {
     name: "Lual Chol",
-    role: "Director & Operations Lead",
-    bio: "Dedicated to holistic, person-centred service delivery that prioritises dignity, respect, and reliable 24/7 care for participants and their families.",
+    role: "Director & Operations Manager",
+    bio: "Focused on reliable, respectful supports that fit each participant's routine, and on clear communication with families.",
     image: "/images/team-lual-chol.svg",
     imageAlt: "Illustrated placeholder portrait for Lual Chol, Director of Empowerwell Support",
   },

@@ -9,9 +9,9 @@ export interface PageMeta {
 
 export const PAGES = {
   home: {
-    title: "Empowerwell Support · NDIS Provider in Western Sydney",
+    title: "Empowerwell Support · Registered NDIS Provider, Sydney",
     description:
-      "Registered NDIS provider in Western Sydney offering person-centred disability support, SIL, personal care and community participation.",
+      "Registered NDIS provider in Dharruk NSW. Person-centred SIL, personal care and community support across Greater Sydney and regional NSW.",
   },
   about: {
     title: "About Us · Empowerwell Support",
@@ -21,22 +21,22 @@ export const PAGES = {
   services: {
     title: "Our NDIS Services · Empowerwell Support",
     description:
-      "Our 11 registered NDIS supports, including Supported Independent Living, personal care, community participation and life skills.",
+      "The 11 NDIS supports we are registered for, including Supported Independent Living, personal care, community participation and life skills.",
   },
   whoWeSupport: {
     title: "Who We Support · Empowerwell Support",
     description:
-      "Person-centred care for people living with autism, intellectual disability, ageing-related needs and complex support needs.",
+      "Support for autistic people, people with intellectual disability and NDIS participants who are getting older, on any plan type.",
   },
   ndisInfo: {
-    title: "NDIS Guide & FAQs · Empowerwell Support",
+    title: "NDIS FAQs · Empowerwell Support",
     description:
       "Plain-English answers about the NDIS: plan management types, choosing a provider, and how our intake process works.",
   },
   contact: {
     title: "Contact Us & Make a Referral · Empowerwell Support",
     description:
-      "Call, email or send an NDIS referral online to Empowerwell Support. We support participants across Western Sydney and regional NSW.",
+      "Call, email or send an NDIS referral to Empowerwell Support. We support participants across Greater Sydney and regional NSW.",
   },
   privacy: {
     title: "Privacy Policy · Empowerwell Support",
@@ -46,7 +46,7 @@ export const PAGES = {
   feedback: {
     title: "Feedback & Complaints · Empowerwell Support",
     description:
-      "How to give feedback, raise a concern or make a complaint to Empowerwell Support or the NDIS Quality and Safeguards Commission.",
+      "How to give feedback or make a complaint to Empowerwell Support or the NDIS Quality and Safeguards Commission, plus free advocacy and help lines.",
   },
   notFound: {
     title: "Page Not Found · Empowerwell Support",

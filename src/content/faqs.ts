@@ -1,64 +1,95 @@
 /**
- * Empowerwell Support Pty Ltd — NDIS Frequently Asked Questions
- * 
- * Written in clear, accessible Australian English (Year 8 reading level).
- * Explains NDIS terminology the first time it is introduced.
+ * Empowerwell Support Pty Ltd — NDIS frequently asked questions.
+ *
+ * Plain English for people with intellectual disability, families and carers:
+ * short sentences, everyday words, and a short explanation the first time an NDIS term is used.
+ * Do not add promises (response times, capacity, staff numbers) the client has not confirmed.
  */
+import { SITE } from "./site";
 
 export interface FAQItem {
   id: string;
   question: string;
-  answer: string;
-  category: "ndis_basics" | "plan_management" | "services_process";
+  /** Opening paragraph(s). */
+  answer: string[];
+  /** Optional list shown after the opening paragraph(s). */
+  points?: { label?: string; text: string }[];
+  /** Optional closing paragraph. */
+  after?: string;
 }
 
 export const FAQS: FAQItem[] = [
   {
     id: "what-is-ndis",
     question: "What is the NDIS?",
-    answer: "The National Disability Insurance Scheme (NDIS) is an Australian Government initiative that provides funding directly to people living with significant and permanent disability. This funding enables you to access the supports, therapies, and services you need to live a healthy, independent, and fulfilling life.",
-    category: "ndis_basics",
+    answer: [
+      "The NDIS is the National Disability Insurance Scheme. It is an Australian scheme that gives funding to people with a permanent and significant disability.",
+      "You use this funding to pay for the supports you need to live your life and reach your goals.",
+    ],
   },
   {
     id: "plan-types",
-    question: "What are the three ways an NDIS plan can be managed?",
-    answer: "There are three ways your NDIS funding can be managed:\n\n1. Self-Managed: You or your nominee manage the budget and pay service providers directly.\n2. Plan-Managed: A registered Plan Manager handles your invoices and claim paperwork on your behalf at no out-of-pocket cost to you.\n3. NDIA-Managed (Agency Managed): The National Disability Insurance Agency (NDIA) pays your providers directly from your plan.\n\nBecause Empowerwell Support is a fully Registered NDIS Provider (Registration: 4-LCYP0SK), we can support participants across all three management types.",
-    category: "plan_management",
+    question: "What are the ways an NDIS plan can be managed?",
+    answer: ["There are three ways to manage the money in your NDIS plan:"],
+    points: [
+      { label: "Self-managed", text: "You (or someone you trust) pay your providers yourself, then claim the money back from the NDIS." },
+      { label: "Plan-managed", text: "A plan manager pays your providers for you. The NDIS pays for the plan manager." },
+      { label: "Agency-managed (NDIA-managed)", text: "The NDIA (the agency that runs the NDIS) pays your providers directly." },
+    ],
+    after: `We are a registered NDIS provider (${SITE.ndisRegistration}), so we can support you with any of these three.`,
   },
   {
     id: "registered-provider-benefit",
-    question: "Why does it matter that Empowerwell Support is a Registered NDIS Provider?",
-    answer: "Being registered with the NDIS Quality and Safeguards Commission means we have met strict government quality, safety, worker screening, and governance standards. It also means we can support NDIA-managed participants who are legally required to use registered providers for high-intensity and SIL supports.",
-    category: "ndis_basics",
+    question: "Why does it matter that you are a registered NDIS provider?",
+    answer: [
+      "Registered providers are checked by the NDIS Quality and Safeguards Commission. They must meet the NDIS Practice Standards and follow the NDIS Code of Conduct, and their workers must pass an NDIS Worker Screening Check.",
+      "If your plan is agency-managed, you can only use registered providers.",
+    ],
+    after: "You can check our registration on the NDIS Provider Register.",
   },
   {
     id: "choosing-provider",
-    question: "How do I choose the right provider for my needs?",
-    answer: "Look for a provider who listens to your goals, respects your cultural background, and communicates openly. You should feel comfortable asking about their staff qualifications, how they match support workers to your interests, and how they handle feedback. At Empowerwell Support, we offer an obligation-free meet and greet so you can decide if we are the right fit.",
-    category: "services_process",
+    question: "How do I choose the right provider?",
+    answer: ["Choose a provider who listens to you and respects your culture. Good questions to ask:"],
+    points: [
+      { text: "How will you match me with a support worker?" },
+      { text: "Can I meet my worker before supports start?" },
+      { text: "What happens if I want to change something or make a complaint?" },
+    ],
+    after: "We offer a free meet and greet, with no obligation, so you can decide if we are right for you.",
   },
   {
     id: "what-happens-after-enquire",
-    question: "What happens after I make an enquiry or referral?",
-    answer: "Our intake process is simple, friendly, and transparent:\n\nStep 1: Quick Friendly Call — We phone you within 24 business hours to discuss your goals, interests, and current NDIS plan.\nStep 2: Free Meet & Greet — We meet in person (at your home, in Dharruk, or in the community) so you can meet our team with zero obligation.\nStep 3: Tailored Service Agreement — Together, we create a clear service schedule tailored to your budget with no hidden costs.",
-    category: "services_process",
+    question: "What happens after I contact you?",
+    answer: ["Here is what happens next:"],
+    points: [
+      { label: "We call you", text: "We talk about your goals, your routine and your NDIS plan." },
+      { label: "We meet", text: "We meet you at home or somewhere in the community. It is free and there is no obligation." },
+      { label: "We agree a plan", text: "We write a service agreement with you. It shows the supports, the times and the costs." },
+    ],
   },
   {
     id: "pricing-rates",
     question: "How much do your services cost?",
-    answer: "We charge strictly in line with the official NDIS Pricing Arrangements and Price Limits set by the National Disability Insurance Agency. There are no surprise out-of-pocket fees for covered supports. All costs are itemised and agreed upon in your Service Agreement before supports commence.",
-    category: "services_process",
+    answer: [
+      "Our prices follow the NDIS Pricing Arrangements and Price Limits. These are the prices the NDIA sets.",
+      "Before any supports start, we agree the costs with you in writing, in your service agreement.",
+    ],
   },
   {
     id: "service-coverage",
-    question: "Which areas do you service across Sydney and NSW?",
-    answer: "Our head office is in Dharruk NSW 2770 in Western Sydney. We provide regular daily supports across Blacktown, Penrith, Parramatta, Liverpool, Campbelltown, Greater Western Sydney, and regional New South Wales communities.",
-    category: "services_process",
+    question: "Which areas do you cover?",
+    answer: [
+      `We are based in ${SITE.suburb}, ${SITE.state}. We support participants across ${SITE.serviceAreas}.`,
+      "Call us to check if we can support you where you live.",
+    ],
   },
   {
     id: "worker-compatibility",
-    question: "Can I choose my support worker or request a change?",
-    answer: "Yes, absolutely. Choice and control are fundamental to our mission. We carefully match support workers based on shared interests, language preferences, and cultural background. If at any time you feel a match is not quite right, we will happily transition to another member of our care team with complete respect and no awkwardness.",
-    category: "services_process",
+    question: "Can I choose my support worker, or change them?",
+    answer: [
+      "Yes. You have choice and control. We try to match you with a worker who suits your interests, language and culture.",
+      "If a match does not feel right, tell us and we will work with you to find a better one.",
+    ],
   },
 ];

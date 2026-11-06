@@ -8,6 +8,26 @@
 
 import { FORM_EXAMPLES } from "../content/forms";
 
+/** Value used for the "feedback or complaint" choice (also selected by /contact?service=feedback). */
+export const FEEDBACK_OPTION = "Feedback or a complaint";
+
+/** Longest message accepted; keeps the mailto fallback under common 2,000-character URL limits. */
+export const MESSAGE_MAX_LENGTH = 1200;
+
+const ROLE_LABELS: Record<string, string> = {
+  participant: "NDIS participant (for myself)",
+  carer_family: "Family member or carer",
+  support_coordinator: "Support coordinator or LAC",
+  other: "Health professional, advocate or other",
+};
+
+const PLAN_LABELS: Record<string, string> = {
+  plan: "Plan-managed",
+  self: "Self-managed",
+  ndia: "Agency-managed (NDIA)",
+  exploring: "Not sure / still applying",
+};
+
 export interface EnquiryFormData {
   fullName: string;
   phone: string;
@@ -105,7 +125,7 @@ export function validateEnquiryForm(data: EnquiryFormData): ValidationErrors {
     errors.role = "Please select who you are completing this form for.";
   }
 
-  if (!data.planType) {
+  if (!data.planType && data.serviceOfInterest !== FEEDBACK_OPTION) {
     errors.planType = "Please select how your NDIS plan is managed.";
   }
 
@@ -117,6 +137,8 @@ export function validateEnquiryForm(data: EnquiryFormData): ValidationErrors {
     errors.message = "Please write a brief message or describe how we can assist you.";
   } else if (data.message.trim().length < 10) {
     errors.message = "Please provide a few more details (minimum 10 characters).";
+  } else if (data.message.length > MESSAGE_MAX_LENGTH) {
+    errors.message = `Please keep your message under ${MESSAGE_MAX_LENGTH} characters, or call us.`;
   }
 
   if (!data.consent) {
@@ -129,29 +151,47 @@ export function validateEnquiryForm(data: EnquiryFormData): ValidationErrors {
 /**
  * Builds a pre-filled mailto URL for the enquiry (used when no endpoint is configured or it fails).
  */
+/** Many mail apps (notably on Windows) truncate or reject mailto links much longer than this. */
+const MAILTO_MAX_LENGTH = 1900;
+const SHORTENED_NOTE = "… [shortened: please add the rest of your message in the email]";
+
 export function generateEnquiryMailto(data: EnquiryFormData, recipient: string): string {
-  const subject = encodeURIComponent(`New NDIS Referral: ${data.fullName} (${data.serviceOfInterest || "General Enquiry"})`);
+  const subject = encodeURIComponent(`New NDIS enquiry: ${data.fullName} (${data.serviceOfInterest || "General enquiry"})`);
 
-  const bodyText = [
-    "NEW NDIS ENQUIRY / REFERRAL",
-    "----------------------------------------------------",
-    `Full Name: ${data.fullName}`,
-    `Phone: ${data.phone}`,
-    `Email: ${data.email}`,
-    `Relationship / Role: ${data.role}`,
-    `Plan Management: ${data.planType}`,
-    `Service of Interest: ${data.serviceOfInterest}`,
-    `NDIS Number: ${data.ndisNumber || "Not provided / Exploring"}`,
-    `Preferred Contact: ${data.preferredContact}`,
-    "",
-    "Message / Needs:",
-    data.message,
-    "",
-    "----------------------------------------------------",
-    "Consent: the sender agreed to the privacy notice and to be contacted about this enquiry.",
-  ].join("\n");
+  const build = (message: string) =>
+    [
+      "NEW NDIS ENQUIRY",
+      "--------------------------------",
+      `Name: ${data.fullName}`,
+      `Phone: ${data.phone}`,
+      `Email: ${data.email}`,
+      `I am: ${ROLE_LABELS[data.role] ?? data.role}`,
+      `Plan management: ${PLAN_LABELS[data.planType] ?? (data.planType || "Not given")}`,
+      `Service: ${data.serviceOfInterest}`,
+      `NDIS number: ${data.ndisNumber || "Not given"}`,
+      `Contact me by: ${data.preferredContact}`,
+      "",
+      "Message:",
+      message,
+      "",
+      "--------------------------------",
+      "The sender agreed to the privacy notice and to be contacted about this enquiry.",
+    ].join("\n");
 
-  return `mailto:${recipient}?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+  const toUrl = (message: string) => `mailto:${recipient}?subject=${subject}&body=${encodeURIComponent(build(message))}`;
+
+  const full = toUrl(data.message);
+  if (full.length <= MAILTO_MAX_LENGTH) return full;
+
+  // Keep as much of the message as fits (URL encoding inflates characters, so measure the encoded URL).
+  let lo = 0;
+  let hi = data.message.length;
+  while (lo < hi) {
+    const mid = Math.ceil((lo + hi) / 2);
+    if (toUrl(data.message.slice(0, mid) + SHORTENED_NOTE).length <= MAILTO_MAX_LENGTH) lo = mid;
+    else hi = mid - 1;
+  }
+  return toUrl(data.message.slice(0, lo) + SHORTENED_NOTE);
 }
 
 /**

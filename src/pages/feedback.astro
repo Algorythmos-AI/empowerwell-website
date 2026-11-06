@@ -6,120 +6,98 @@ import Section from "../components/ui/Section.astro";
 import Card from "../components/ui/Card.astro";
 import Badge from "../components/ui/Badge.astro";
 import Button from "../components/ui/Button.astro";
+import HelpContacts from "../components/ui/HelpContacts.astro";
 import { SITE } from "../content/site";
+
+const linkClass =
+  "inline-flex items-center min-h-[44px] font-bold text-purple-700 underline underline-offset-4 rounded-sm focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2";
+
+const steps = [
+  {
+    title: "Talk to us",
+    body: "If you feel comfortable, tell your support worker. Many everyday problems can be fixed quickly.",
+  },
+  {
+    title: "Make a complaint to us",
+    body: `Call or email our directors, ${SITE.directors.join(" or ")}. We will listen, look into it, and tell you what we will do. You will not be treated badly for complaining.`,
+  },
+  {
+    title: "Go to the NDIS Commission",
+    body: "You can complain to the NDIS Quality and Safeguards Commission at any time. You do not have to complain to us first, and you can stay anonymous.",
+  },
+];
 ---
 
 <BaseLayout meta={PAGES.feedback}>
   <Section variant="surface" class="pt-8 sm:pt-12 pb-16">
     <Container>
-      <div class="max-w-4xl mx-auto space-y-8">
+      <div class="max-w-4xl mx-auto space-y-10">
         <div>
-          <Badge variant="tint" class="mb-4">Continuous Improvement & Safety</Badge>
-          <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-4 leading-tight">
-            Feedback & Complaints
-          </h1>
+          <Badge variant="tint" class="mb-4">Your right to speak up</Badge>
+          <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-4 leading-tight">Feedback & Complaints</h1>
           <p class="text-xl text-ink leading-relaxed">
-            You always have the right to speak up. Your compliments, suggestions, and complaints help us ensure safe, high-quality, and respectful supports for everyone.
+            You always have the right to speak up. Compliments, ideas and complaints all help us give safer, better supports.
+            You can have a family member, friend or advocate help you at any time.
           </p>
         </div>
 
-        {/* TODO Marker for Directors */}
-        <div class="p-5 rounded-[12px] bg-purple-50 border border-purple-200 text-sm text-purple-900 space-y-1">
-          <p class="font-bold">TODO for Management & Pre-Launch Checklist:</p>
-          <p>
-            Verify the current telephone number and contact URLs for the NDIS Quality and Safeguards Commission and local advocacy services prior to public launch.
+        <section aria-labelledby="ways-heading" class="space-y-5">
+          <h2 id="ways-heading" class="text-2xl font-bold text-green-900">Three ways to raise a concern</h2>
+          <ol class="grid grid-cols-1 md:grid-cols-3 gap-6" role="list">
+            {
+              steps.map((step, i) => (
+                <li>
+                  <Card variant="white" padding="md" class="border border-green-100 h-full">
+                    <span
+                      class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-green-100 text-green-900 font-bold"
+                      aria-hidden="true"
+                    >
+                      {i + 1}
+                    </span>
+                    <h3 class="text-xl font-bold text-green-900 mt-3 mb-2">{step.title}</h3>
+                    <p class="text-base text-ink leading-relaxed">{step.body}</p>
+                  </Card>
+                </li>
+              ))
+            }
+          </ol>
+          <div class="flex flex-wrap gap-3">
+            <Button href="/contact?service=feedback#enquiry-form" variant="primary" size="md">Send us feedback</Button>
+            <Button href={SITE.phoneHref} variant="outline" size="md">Call {SITE.phone}</Button>
+          </div>
+        </section>
+
+        <section aria-labelledby="commission-heading" class="p-6 sm:p-8 rounded-[12px] bg-surface-tint border-2 border-green-300 space-y-4">
+          <Badge variant="green">Independent of us</Badge>
+          <h2 id="commission-heading" class="text-2xl font-bold text-green-900">NDIS Quality and Safeguards Commission</h2>
+          <p class="text-base sm:text-lg text-ink leading-relaxed">
+            The NDIS Commission is the national regulator of NDIS providers. It takes complaints about any NDIS provider.
           </p>
-        </div>
-
-        {/* 3 Pathways */}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          <Card variant="white" padding="md" class="border border-green-100 flex flex-col justify-between">
-            <div class="space-y-3">
-              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-900 font-bold text-sm">
-                1
-              </span>
-              <h2 class="text-xl font-bold text-green-900">
-                Talk to Your Worker
-              </h2>
-              <p class="text-sm text-ink leading-relaxed">
-                If you feel comfortable, discuss your concern directly with your support worker or coordinator. Most everyday issues can be resolved quickly in a friendly conversation.
-              </p>
-            </div>
-          </Card>
-
-          <Card variant="white" padding="md" class="border border-purple-200 flex flex-col justify-between">
-            <div class="space-y-3">
-              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold text-sm">
-                2
-              </span>
-              <h2 class="text-xl font-bold text-purple-700">
-                Formal Complaint
-              </h2>
-              <p class="text-sm text-ink leading-relaxed">
-                Contact our Directors (Aiwen Kuel & Lual Chol) via phone or email. We will acknowledge your complaint within 2 business days and investigate thoroughly without any retaliation.
-              </p>
-            </div>
-          </Card>
-
-          <Card variant="white" padding="md" class="border border-lime-300 flex flex-col justify-between">
-            <div class="space-y-3">
-              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-lime-100 text-ink font-bold text-sm">
-                3
-              </span>
-              <h2 class="text-xl font-bold text-green-900">
-                NDIS Commission
-              </h2>
-              <p class="text-sm text-ink leading-relaxed">
-                If you are not satisfied with our response or wish to speak to an independent government body, you can contact the NDIS Quality and Safeguards Commission directly.
-              </p>
-            </div>
-          </Card>
-        </div>
-
-        {/* NDIS Commission Official Contact Box */}
-        <div class="p-8 rounded-[16px] bg-surface-tint border-2 border-green-300 space-y-4">
-          <Badge variant="green">Independent Government Escalation</Badge>
-          <h2 class="text-2xl font-bold text-green-900">
-            NDIS Quality and Safeguards Commission
-          </h2>
-          <p class="text-base text-ink leading-relaxed">
-            The NDIS Commission is an independent agency established to improve the quality and safety of NDIS supports and services across Australia.
-          </p>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div class="p-4 rounded-[12px] bg-white border border-green-200">
-              <p class="font-bold text-muted uppercase text-xs">Commission Phone</p>
-              <a href={SITE.ndisCommissionPhoneHref} class="inline-flex items-center min-h-[44px] text-lg font-bold text-purple-700 underline underline-offset-4 rounded-sm focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2">{SITE.ndisCommissionPhone}</a>
-              <p class="text-xs text-muted">Free call from landlines</p>
+              <p class="font-bold text-muted uppercase text-sm tracking-wide">Phone</p>
+              <a href={SITE.ndisCommissionPhoneHref} class={`${linkClass} text-xl`}>{SITE.ndisCommissionPhone}</a>
             </div>
-
             <div class="p-4 rounded-[12px] bg-white border border-green-200">
-              <p class="font-bold text-muted uppercase text-xs">Website & Complaint Form</p>
-              <a
-                href={SITE.ndisCommissionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center min-h-[44px] text-base font-bold text-purple-700 underline underline-offset-4 rounded-sm focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
-              >
-                ndiscommission.gov.au
-              </a>
-              <p class="text-xs text-muted">Online complaint portal</p>
+              <p class="font-bold text-muted uppercase text-sm tracking-wide">Online</p>
+              <a href={SITE.ndisCommissionComplaintsUrl} class={linkClass} rel="noopener">Make a complaint on the Commission website</a>
             </div>
           </div>
-        </div>
-
-        {/* Advocacy Support */}
-        <div class="space-y-4 pt-4">
-          <h2 class="text-2xl font-bold text-green-900">Need Help with an Advocate?</h2>
-          <p class="text-base text-ink leading-relaxed">
-            You have the right to involve an independent advocate, family member, or friend at any stage of raising a concern or complaint. You can find free advocacy services using the Australian Government's National Disability Advocacy Program (NDAP) Disability Advocacy Finder.
+          <p class="text-base text-ink">
+            You can check that we are a registered NDIS provider (registration {SITE.ndisRegistration}) on the
+            <a href={SITE.ndisProviderRegisterUrl} class={linkClass} rel="noopener">NDIS Provider Register</a>.
           </p>
-          <div class="pt-2">
-            <Button href="/contact" variant="primary" size="md">
-              Send Direct Feedback to Empowerwell Directors
-            </Button>
-          </div>
-        </div>
+        </section>
+
+        <section aria-labelledby="advocate-heading" class="space-y-3">
+          <h2 id="advocate-heading" class="text-2xl font-bold text-green-900">Getting help from an advocate</h2>
+          <p class="text-base sm:text-lg text-ink leading-relaxed">
+            An advocate is someone independent who can help you speak up. Advocacy services are free.
+          </p>
+          <a href={SITE.advocacyUrl} class={linkClass} rel="noopener">Find a disability advocate (Disability Gateway)</a>
+        </section>
+
+        <HelpContacts />
       </div>
     </Container>
   </Section>

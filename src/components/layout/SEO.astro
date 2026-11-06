@@ -52,18 +52,10 @@ const localBusinessSchema = {
     addressCountry: "AU",
   },
   areaServed: [
-    { "@type": "AdministrativeArea", name: "Western Sydney" },
     { "@type": "AdministrativeArea", name: "Greater Sydney" },
     { "@type": "AdministrativeArea", name: "Regional New South Wales" },
   ],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "18:00",
-    },
-  ],
+  // openingHoursSpecification omitted until the client confirms which days the office is open.
   founder: SITE.directors.map((name) => ({ "@type": "Person", name })),
   ...(sameAs.length > 0 ? { sameAs } : {}),
 };

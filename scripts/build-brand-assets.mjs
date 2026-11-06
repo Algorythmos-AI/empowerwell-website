@@ -116,7 +116,7 @@ async function main() {
   await sharp({ create: { width: 1200, height: 630, channels: 4, background: SURFACE_TINT } })
     .composite([{ input: card, gravity: "center" }])
     .flatten({ background: SURFACE_TINT })
-    .png({ compressionLevel: 9 })
+    .png({ compressionLevel: 9, palette: true, quality: 90 })
     .toFile(out("public/og-image.png"));
 
   console.log("Brand assets written.");

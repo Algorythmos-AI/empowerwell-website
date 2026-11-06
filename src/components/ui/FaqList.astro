@@ -1,0 +1,52 @@
+---
+import type { FAQItem } from "../../content/faqs";
+
+interface Props {
+  items: FAQItem[];
+  /** Open the first question by default. */
+  openFirst?: boolean;
+}
+
+const { items, openFirst = true } = Astro.props;
+---
+
+<!-- Native <details>/<summary>: keyboard, screen-reader and find-in-page support with no JavaScript. -->
+<div class="space-y-4">
+  {
+    items.map((item, i) => (
+      <details
+        id={item.id}
+        open={openFirst && i === 0}
+        class="group rounded-[12px] border border-border-card bg-white shadow-soft overflow-hidden"
+      >
+        <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 cursor-pointer list-none min-h-[44px] rounded-[12px] focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:-outline-offset-3 [&::-webkit-details-marker]:hidden">
+          <h3 class="text-lg sm:text-xl font-bold text-ink group-hover:text-purple-700 m-0 text-left">{item.question}</h3>
+          <span
+            class="p-2 rounded-full bg-surface-tint text-purple-700 shrink-0 transition-transform duration-200 group-open:rotate-180 group-open:bg-purple-100"
+            aria-hidden="true"
+          >
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </span>
+        </summary>
+        <div class="px-5 pb-6 sm:px-6 pt-1 text-ink leading-relaxed text-base sm:text-lg space-y-3">
+          {item.answer.map((para) => <p>{para}</p>)}
+          {
+            item.points && (
+              <ul class="list-disc pl-6 space-y-2" role="list">
+                {item.points.map((pt) => (
+                  <li>
+                    {pt.label && <strong>{pt.label}: </strong>}
+                    {pt.text}
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+          {item.after && <p>{item.after}</p>}
+        </div>
+      </details>
+    ))
+  }
+</div>
