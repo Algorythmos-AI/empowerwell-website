@@ -4,9 +4,9 @@ Marketing and referral website for Empowerwell Support Pty Ltd, a registered NDI
 
 | | |
 |---|---|
-| **Status** | In build, not live |
+| **Status** | Preview live; awaiting client content and domain |
 | **Owner** | [@Algorythmos-AI/maintainers](https://github.com/orgs/Algorythmos-AI/teams/maintainers) |
-| **Runs at** | Not deployed yet (target: <https://empowerwell.com.au>, Vercel, deploys from `main`) |
+| **Runs at** | <https://empowerwell-website.vercel.app> (Vercel project `empowerwell-website`, deploys from `main`); target domain empowerwell.com.au |
 | **Run locally** | `npm ci && npm run dev` |
 | **Context** | [Org repository map](https://github.com/Algorythmos-AI/.github-private/blob/main/profile/README.md#repository-map) · [Glossary](https://github.com/Algorythmos-AI/.github-private/blob/main/docs/glossary.md) |
 
@@ -107,7 +107,7 @@ Cards use `rounded-[12px]`, buttons `rounded-full`, shadows `shadow-soft`.
 
 ## Deployment
 
-Vercel, static output from `dist/`. `vercel.json` sets HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, immutable caching for `/_astro/*`, and skips builds for docs-only commits. Set `PUBLIC_FORM_ENDPOINT` in the Vercel project before launch.
+Vercel, static output from `dist/`. `vercel.json` sets HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, immutable caching for `/_astro/*`, and skips builds for docs-only commits. Set `PUBLIC_FORM_ENDPOINT` in the Vercel project before launch. `*.vercel.app` hosts send `X-Robots-Tag: noindex` so only the custom domain is indexed.
 
 ## Licence
 
