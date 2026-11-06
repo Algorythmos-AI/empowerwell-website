@@ -1,0 +1,35 @@
+---
+interface Props {
+  variant?: "surface" | "tint" | "white" | "bordered";
+  padding?: "none" | "sm" | "md" | "lg";
+  class?: string;
+  as?: "div" | "article" | "li";
+}
+
+const {
+  variant = "white",
+  padding = "md",
+  class: className = "",
+  as: Tag = "div",
+} = Astro.props;
+
+const variantStyles = {
+  white: "bg-white border border-border-card shadow-soft",
+  surface: "bg-surface border border-green-100 shadow-soft",
+  tint: "bg-surface-tint border border-green-200 shadow-soft",
+  bordered: "bg-transparent border-2 border-green-200",
+};
+
+const paddingStyles = {
+  none: "p-0",
+  sm: "p-4 sm:p-5",
+  md: "p-6 sm:p-8",
+  lg: "p-8 sm:p-10",
+};
+---
+
+<Tag
+  class={`rounded-[12px] transition-shadow duration-200 ${variantStyles[variant]} ${paddingStyles[padding]} ${className}`}
+>
+  <slot />
+</Tag>

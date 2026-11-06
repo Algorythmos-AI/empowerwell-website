@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Section from "../components/ui/Section.astro";
+import Card from "../components/ui/Card.astro";
+import Badge from "../components/ui/Badge.astro";
+import Button from "../components/ui/Button.astro";
+import { SITE } from "../content/site";
+---
+
+<BaseLayout
+  title={`Feedback & Complaints · ${SITE.brandName} · NDIS Quality & Safeguards`}
+  description="How to provide feedback, raise a concern, or make a formal complaint to Empowerwell Support and the NDIS Quality and Safeguards Commission."
+>
+  <Section variant="surface" class="pt-8 sm:pt-12 pb-16">
+    <Container>
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div>
+          <Badge variant="tint" class="mb-4">Continuous Improvement & Safety</Badge>
+          <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-4 leading-tight">
+            Feedback & Complaints
+          </h1>
+          <p class="text-xl text-ink leading-relaxed">
+            You always have the right to speak up. Your compliments, suggestions, and complaints help us ensure safe, high-quality, and respectful supports for everyone.
+          </p>
+        </div>
+
+        {/* TODO Marker for Directors */}
+        <div class="p-5 rounded-[12px] bg-purple-50 border border-purple-200 text-sm text-purple-900 space-y-1">
+          <p class="font-bold">TODO for Management & Pre-Launch Checklist:</p>
+          <p>
+            Verify the current telephone number and contact URLs for the NDIS Quality and Safeguards Commission and local advocacy services prior to public launch.
+          </p>
+        </div>
+
+        {/* 3 Pathways */}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          <Card variant="white" padding="md" class="border border-green-100 flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-900 font-bold text-sm">
+                1
+              </span>
+              <h2 class="text-xl font-bold text-green-900">
+                Talk to Your Worker
+              </h2>
+              <p class="text-sm text-ink leading-relaxed">
+                If you feel comfortable, discuss your concern directly with your support worker or coordinator. Most everyday issues can be resolved quickly in a friendly conversation.
+              </p>
+            </div>
+          </Card>
+
+          <Card variant="white" padding="md" class="border border-purple-200 flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold text-sm">
+                2
+              </span>
+              <h2 class="text-xl font-bold text-purple-700">
+                Formal Complaint
+              </h2>
+              <p class="text-sm text-ink leading-relaxed">
+                Contact our Directors (Aiwen Kuel & Lual Chol) via phone or email. We will acknowledge your complaint within 2 business days and investigate thoroughly without any retaliation.
+              </p>
+            </div>
+          </Card>
+
+          <Card variant="white" padding="md" class="border border-lime-300 flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-lime-100 text-ink font-bold text-sm">
+                3
+              </span>
+              <h2 class="text-xl font-bold text-green-900">
+                NDIS Commission
+              </h2>
+              <p class="text-sm text-ink leading-relaxed">
+                If you are not satisfied with our response or wish to speak to an independent government body, you can contact the NDIS Quality and Safeguards Commission directly.
+              </p>
+            </div>
+          </Card>
+        </div>
+
+        {/* NDIS Commission Official Contact Box */}
+        <div class="p-8 rounded-[16px] bg-surface-tint border-2 border-green-300 space-y-4">
+          <Badge variant="green">Independent Government Escalation</Badge>
+          <h2 class="text-2xl font-bold text-green-900">
+            NDIS Quality and Safeguards Commission
+          </h2>
+          <p class="text-base text-ink leading-relaxed">
+            The NDIS Commission is an independent agency established to improve the quality and safety of NDIS supports and services across Australia.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-sm">
+            <div class="p-4 rounded-[12px] bg-white border border-green-200">
+              <p class="font-bold text-muted uppercase text-xs">Commission Phone</p>
+              <p class="text-lg font-bold text-purple-700 mt-1">1800 035 544</p>
+              <p class="text-xs text-muted">Free call from landlines</p>
+            </div>
+
+            <div class="p-4 rounded-[12px] bg-white border border-green-200">
+              <p class="font-bold text-muted uppercase text-xs">Website & Complaint Form</p>
+              <a
+                href="https://www.ndiscommission.gov.au"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-base font-bold text-purple-700 underline mt-1 block"
+              >
+                ndiscommission.gov.au
+              </a>
+              <p class="text-xs text-muted">Online complaint portal</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Advocacy Support */}
+        <div class="space-y-4 pt-4">
+          <h2 class="text-2xl font-bold text-green-900">Need Help with an Advocate?</h2>
+          <p class="text-base text-ink leading-relaxed">
+            You have the right to involve an independent advocate, family member, or friend at any stage of raising a concern or complaint. You can find free advocacy services using the Australian Government's National Disability Advocacy Program (NDAP) Disability Advocacy Finder.
+          </p>
+          <div class="pt-2">
+            <Button href="/contact" variant="primary" size="md">
+              Send Direct Feedback to Empowerwell Directors
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

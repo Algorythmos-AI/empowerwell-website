@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Section from "../components/ui/Section.astro";
+import Badge from "../components/ui/Badge.astro";
+import Button from "../components/ui/Button.astro";
+import FaqAccordion from "../components/islands/FaqAccordion";
+import { SITE } from "../content/site";
+import { FAQS } from "../content/faqs";
+---
+
+<BaseLayout
+  title={`NDIS Guide & FAQs · ${SITE.brandName} · Plain English Advice`}
+  description="Clear, plain-English guidance on understanding the NDIS, navigating plan management types, choosing the right provider, and our intake process."
+>
+  {/* Hero */}
+  <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
+    <Container>
+      <div class="max-w-3xl">
+        <Badge variant="tint" class="mb-4">Clear, Plain-English Answers</Badge>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">
+          Understanding Your NDIS Plan & Options
+        </h1>
+        <p class="text-xl text-ink leading-relaxed">
+          The NDIS can feel complicated, but getting the support you need should not be. Here are straightforward answers to common questions about plans, funding, and choosing a provider.
+        </p>
+      </div>
+    </Container>
+  </Section>
+
+  {/* FAQ Accordion Section */}
+  <Section variant="tint">
+    <Container>
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div>
+          <h2 class="text-3xl font-extrabold text-green-900 mb-3">
+            Frequently Asked Questions
+          </h2>
+          <p class="text-base text-muted">
+            Click on any question below to expand the answer. Works reliably with or without JavaScript enabled.
+          </p>
+        </div>
+
+        {/* Semantic details/summary accordion island */}
+        <FaqAccordion client:load items={FAQS} allowMultiple={true} />
+
+        {/* Direct Help Callout */}
+        <div class="mt-12 p-8 rounded-[16px] bg-white border border-green-200 shadow-soft text-center space-y-4">
+          <h3 class="text-2xl font-bold text-green-900">
+            Have a question not listed here?
+          </h3>
+          <p class="text-base text-ink max-w-xl mx-auto">
+            Our friendly intake team in Dharruk is always available to help explain your options in plain language.
+          </p>
+          <div class="pt-2 flex flex-wrap justify-center gap-4">
+            <Button href={SITE.phoneHref} variant="primary" size="md">
+              Call Us at {SITE.phone}
+            </Button>
+            <Button href="/contact" variant="outline" size="md">
+              Send an Online Question
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F2F7EF"/>
+      <stop offset="100%" stop-color="#E5EFE2"/>
+    </linearGradient>
+    <pattern id="patternDots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.5" fill="#3AB04A" opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+  <rect width="800" height="500" fill="url(#patternDots)"/>
+
+  <!-- Border -->
+  <rect x="12" y="12" width="776" height="476" rx="16" fill="none" stroke="#00613A" stroke-width="2" stroke-opacity="0.3"/>
+
+  <!-- Center Decorative Emblem -->
+  <g transform="translate(400, 200)">
+    <circle r="70" fill="#00613A" opacity="0.08"/>
+    <circle r="54" fill="#622072" opacity="0.12"/>
+    <circle r="36" fill="#3AB04A" opacity="0.25"/>
+    <!-- Central Icon Representation -->
+    <path d="M-18 8 C-18 -12 0 -24 0 -24 C0 -24 18 -12 18 8 C18 18 10 24 0 24 C-10 24 -18 18 -18 8 Z" fill="#00613A"/>
+    <circle cx="0" cy="-2" r="7" fill="#8BC53F"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="340" text-anchor="middle" font-family="'Nunito', sans-serif" font-weight="800" font-size="26" fill="#00613A">Community Participation Hub</text>
+  
+  <!-- Trust Note -->
+  <text x="400" y="380" text-anchor="middle" font-family="'Atkinson Hyperlegible', sans-serif" font-weight="700" font-size="14" fill="#622072">Empowerwell Support · NDIS 4-LCYP0SK</text>
+
+  <!-- TODO Marker (Accessible developer notification) -->
+  <rect x="24" y="444" width="752" height="36" rx="8" fill="#FAFAF7" stroke="#8BC53F" stroke-width="1.5"/>
+  <text x="400" y="467" text-anchor="middle" font-family="'Atkinson Hyperlegible', sans-serif" font-size="11" fill="#5B6660" font-weight="700">TODO: Replace with licensed photo of group activity and social crafts</text>
+</svg>

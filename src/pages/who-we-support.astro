@@ -1,0 +1,178 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Section from "../components/ui/Section.astro";
+import Card from "../components/ui/Card.astro";
+import Badge from "../components/ui/Badge.astro";
+import Button from "../components/ui/Button.astro";
+import { SITE } from "../content/site";
+
+const participantGroups = [
+  {
+    title: "Autism & Neurodivergent Individuals",
+    description: "Support workers who understand sensory sensitivities, predictable routines, and positive communication strategies to foster independence at home and in public spaces.",
+    features: [
+      "Consistent routine building and sensory-friendly home adaptations",
+      "Support with social outings and hobby exploration",
+      "Patience, empathy, and active listening without judgment",
+      "Skill coaching for independent travel and budgeting",
+    ],
+  },
+  {
+    title: "Intellectual & Developmental Disabilities",
+    description: "Empowering participants to build lifelong daily living skills, form meaningful friendships, and take active control of their everyday decisions.",
+    features: [
+      "Clear, easy-to-follow visual cues and step-by-step coaching",
+      "Assistance with personal care and meal preparation",
+      "Supported community participation and group activities",
+      "Goal setting and milestone celebration with family",
+    ],
+  },
+  {
+    title: "Ageing & Seniors Living with Disability",
+    description: "Gentle, compassionate in-home care designed to keep seniors living comfortably, safely, and with dignity in their familiar home environment.",
+    features: [
+      "Assistance with personal hygiene and gentle hoist/mobility transfers",
+      "Medication reminders and accompaniment to specialist visits",
+      "Household tasks, meal cooking, and laundry support",
+      "Warm companionship to prevent loneliness and isolation",
+    ],
+  },
+  {
+    title: "Complex Health & High-Intensity Support Needs",
+    description: "Specialised, around-the-clock SIL and personal care delivered by experienced support workers trained in complex physical and behavioural support plans.",
+    features: [
+      "Complex bowel care, enteral feeding, and catheter support",
+      "Positive Behaviour Support (PBS) plan implementation",
+      "24/7 on-site and active overnight sleepover staff",
+      "Close coordination with your allied health and medical teams",
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={`Who We Support · ${SITE.brandName} · NDIS Provider Western Sydney`}
+  description="Discover how Empowerwell Support provides person-centred care for people with autism, intellectual disability, ageing participants, and complex care needs."
+>
+  {/* Hero */}
+  <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
+    <Container>
+      <div class="max-w-3xl">
+        <Badge variant="tint" class="mb-4">Person-Centred Focus</Badge>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">
+          Every Journey is Unique. We Meet You Exactly Where You Are.
+        </h1>
+        <p class="text-xl text-ink leading-relaxed">
+          At Empowerwell Support, we work collaboratively with participants, families, carers, and Support Coordinators to create warm, stable support environments that celebrate individuality.
+        </p>
+      </div>
+    </Container>
+  </Section>
+
+  {/* Participant Focus Groups */}
+  <Section variant="tint">
+    <Container>
+      <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <Badge variant="purple" class="mb-3">Who We Walk Beside</Badge>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">
+          Specialised Support Across Diverse Lived Experiences
+        </h2>
+        <p class="text-lg text-ink">
+          Our team is trained to deliver empathetic, respectful care tailored to your exact communication style and support requirements.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {
+          participantGroups.map((group) => (
+            <Card variant="white" padding="lg" class="border border-green-100 flex flex-col justify-between">
+              <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-purple-700">
+                  {group.title}
+                </h3>
+                <p class="text-base text-ink leading-relaxed">
+                  {group.description}
+                </p>
+
+                <div class="pt-2">
+                  <p class="text-xs font-bold text-green-900 uppercase tracking-wider mb-2">
+                    How We Help:
+                  </p>
+                  <ul class="space-y-2 text-sm text-ink">
+                    {group.features.map((feat) => (
+                      <li class="flex items-start gap-2">
+                        <span class="text-green-600 font-bold shrink-0 mt-0.5">✓</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div class="pt-6 mt-6 border-t border-green-50">
+                <Button href="/contact" variant="outline" size="sm" class="w-full">
+                  Discuss Support for {group.title.split("&")[0].trim()}
+                </Button>
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  {/* Plan Management Flexibility */}
+  <Section variant="surface">
+    <Container>
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div class="text-center">
+          <Badge variant="green" class="mb-3">All Plan Types Welcome</Badge>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">
+            We Welcome Self, Plan, and NDIA-Managed Participants
+          </h2>
+          <p class="text-lg text-ink">
+            Because Empowerwell Support is a Registered NDIS Provider (Registration 4-LCYP0SK), you have complete freedom to engage our services no matter how your NDIS funding is administered.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          <Card variant="tint" padding="md" class="text-center space-y-3">
+            <h3 class="text-xl font-bold text-green-900">Plan-Managed</h3>
+            <p class="text-sm text-ink leading-relaxed">
+              We send our itemised invoices straight to your nominated Plan Manager. Zero out-of-pocket costs and zero paperwork stress for you.
+            </p>
+          </Card>
+
+          <Card variant="tint" padding="md" class="text-center space-y-3">
+            <h3 class="text-xl font-bold text-purple-700">Self-Managed</h3>
+            <p class="text-sm text-ink leading-relaxed">
+              Enjoy total control over your schedule and rates. We provide simple, NDIS-compliant receipts for fast claim reimbursement through the myplace portal.
+            </p>
+          </Card>
+
+          <Card variant="tint" padding="md" class="text-center space-y-3">
+            <h3 class="text-xl font-bold text-green-900">NDIA-Managed</h3>
+            <p class="text-sm text-ink leading-relaxed">
+              We claim directly through the NDIA portal (PRODA). Only registered providers like Empowerwell Support can support agency-managed participants.
+            </p>
+          </Card>
+        </div>
+
+        <div class="p-6 rounded-[12px] bg-purple-100 border border-purple-200 text-center space-y-3">
+          <p class="text-lg font-bold text-purple-900">
+            Are you a Support Coordinator or Local Area Coordinator (LAC)?
+          </p>
+          <p class="text-sm text-ink max-w-2xl mx-auto">
+            We work closely with coordinators across Western Sydney to provide prompt intake assessments, capacity updates, and regular progress reports.
+          </p>
+          <div class="pt-2">
+            <Button href="/contact" variant="secondary" size="md">
+              Submit a Participant Referral
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

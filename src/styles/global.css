@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "@fontsource/nunito/700.css";
+@import "@fontsource/nunito/800.css";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+
+@theme {
+  --color-green-50: #EEF7F2;
+  --color-green-100: #D5EDE0;
+  --color-green-200: #ABDCBE;
+  --color-green-300: #78C496;
+  --color-green-400: #4BA871;
+  --color-green-500: #3AB04A;
+  --color-green-600: #26853C;
+  --color-green-700: #176E36;
+  --color-green-800: #0A522C;
+  --color-green-900: #00613A;
+  --color-green-950: #003822;
+
+  --color-purple-50: #F9F3FA;
+  --color-purple-100: #F1E3F4;
+  --color-purple-200: #E3C6EA;
+  --color-purple-300: #CFA3D9;
+  --color-purple-400: #B479C2;
+  --color-purple-500: #9851A7;
+  --color-purple-600: #7C328E;
+  --color-purple-700: #622072;
+  --color-purple-800: #4E185C;
+  --color-purple-900: #3B1147;
+  --color-purple-950: #270730;
+
+  --color-lime-400: #8BC53F;
+
+  --color-surface: #FAFAF7;
+  --color-surface-tint: #F2F7EF;
+  --color-ink: #1F2A24;
+  --color-muted: #5B6660;
+  --color-border-card: #E1E8E3;
+
+  --font-heading: 'Nunito', sans-serif;
+  --font-body: 'Atkinson Hyperlegible', sans-serif;
+
+  --radius-card: 12px;
+  --radius-button: 9999px;
+
+  --shadow-soft: 0 2px 8px -2px rgba(0, 97, 58, 0.06), 0 4px 16px -4px rgba(0, 0, 0, 0.04);
+  --shadow-soft-lg: 0 8px 24px -4px rgba(0, 97, 58, 0.08), 0 16px 32px -8px rgba(0, 0, 0, 0.05);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* WCAG 2.2 AA Focus Indicators */
+:focus-visible {
+  outline: 3px solid var(--color-purple-700);
+  outline-offset: 3px;
+}
+
+/* Accessible Skip Link */
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.85rem 1.5rem;
+  background-color: var(--color-purple-700);
+  color: #ffffff;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: top 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Tap Target Baseline */
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+/* Headings font declaration */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-purple-700);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* Smooth motion respect */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

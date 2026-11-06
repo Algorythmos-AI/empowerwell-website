@@ -1,0 +1,22 @@
+---
+interface Props {
+  variant?: "lime" | "tint" | "purple" | "green";
+  class?: string;
+}
+
+const { variant = "tint", class: className = "" } = Astro.props;
+
+const variantStyles = {
+  // Text on lime must be ink per brand rules
+  lime: "bg-lime-400 text-ink font-bold",
+  tint: "bg-surface-tint text-green-900 border border-green-200 font-bold",
+  purple: "bg-purple-100 text-purple-700 font-bold",
+  green: "bg-green-100 text-green-900 font-bold",
+};
+---
+
+<span
+  class={`inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm tracking-wide ${variantStyles[variant]} ${className}`}
+>
+  <slot />
+</span>

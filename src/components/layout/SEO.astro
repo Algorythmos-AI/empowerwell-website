@@ -1,0 +1,99 @@
+---
+import { SITE } from "../../content/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogType?: "website" | "article";
+}
+
+const {
+  title = `${SITE.brandName} · ${SITE.tagline}`,
+  description = "Empowerwell Support Pty Ltd is a registered NDIS provider in Western Sydney offering person-centred disability support, SIL, personal care, and community participation.",
+  canonicalUrl = Astro.url.href,
+  ogImage = `${SITE.websiteUrl}/og-image.png`,
+  ogType = "website",
+} = Astro.props;
+
+// LocalBusiness & NDIS Provider Structured Data (JSON-LD)
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": SITE.legalName,
+  "alternateName": SITE.brandName,
+  "description": description,
+  "url": SITE.websiteUrl,
+  "telephone": SITE.phone,
+  "email": SITE.email,
+  "image": ogImage,
+  "priceRange": "NDIS Price Guide Compliant",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": SITE.suburb,
+    "addressRegion": SITE.state,
+    "postalCode": SITE.postcode,
+    "addressCountry": "AU",
+  },
+  "areaServed": [
+    {
+      "@type": "AdministrativeArea",
+      "name": "Greater Sydney",
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "Western Sydney",
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "Regional New South Wales",
+    },
+  ],
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "18:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "00:00",
+      "closes": "23:59",
+      "description": "24/7 on-call disability and SIL supports",
+    },
+  ],
+  "founder": SITE.directors.map((name) => ({
+    "@type": "Person",
+    "name": name,
+  })),
+};
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<meta name="robots" content="index, follow" />
+
+<!-- Open Graph / Facebook / LinkedIn -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content={SITE.legalName} />
+<meta property="og:locale" content="en_AU" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />

@@ -1,0 +1,6 @@
+{
+  "name": "Empowerwell Support",
+  "description": "Registered NDIS provider in Western Sydney offering person-centred disability support, SIL, personal care, and community participation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

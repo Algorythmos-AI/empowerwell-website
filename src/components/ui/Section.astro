@@ -1,0 +1,34 @@
+---
+interface Props {
+  variant?: "surface" | "tint" | "green" | "purple" | "white";
+  class?: string;
+  id?: string;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+}
+
+const {
+  variant = "surface",
+  class: className = "",
+  id,
+  ariaLabel,
+  ariaLabelledBy,
+} = Astro.props;
+
+const variantStyles = {
+  surface: "bg-surface text-ink",
+  tint: "bg-surface-tint text-ink border-y border-green-100",
+  white: "bg-white text-ink",
+  green: "bg-green-900 text-white",
+  purple: "bg-purple-700 text-white",
+};
+---
+
+<section
+  id={id}
+  aria-label={ariaLabel}
+  aria-labelledby={ariaLabelledBy}
+  class={`py-12 sm:py-16 md:py-20 transition-colors ${variantStyles[variant]} ${className}`}
+>
+  <slot />
+</section>

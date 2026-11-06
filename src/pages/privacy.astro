@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Section from "../components/ui/Section.astro";
+import Badge from "../components/ui/Badge.astro";
+import { SITE } from "../content/site";
+---
+
+<BaseLayout
+  title={`Privacy Policy · ${SITE.brandName} · Australian Privacy Principles`}
+  description="Privacy Policy for Empowerwell Support Pty Ltd explaining how we collect, protect, and handle participant personal and health information under the Privacy Act 1988."
+>
+  <Section variant="surface" class="pt-8 sm:pt-12 pb-16">
+    <Container>
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div>
+          <Badge variant="tint" class="mb-4">Compliance & Data Protection</Badge>
+          <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-4 leading-tight">
+            Privacy Policy
+          </h1>
+          <p class="text-sm text-muted">
+            Last Updated: November 2026 · Compliant with the <em>Privacy Act 1988</em> (Cth) and the Australian Privacy Principles (APPs).
+          </p>
+        </div>
+
+        {/* TODO Marker for Legal Counsel Review */}
+        <div class="p-5 rounded-[12px] bg-purple-50 border border-purple-200 text-sm text-purple-900 space-y-1">
+          <p class="font-bold">TODO for Legal & Management Review:</p>
+          <p>
+            This policy outlines the standard Australian Privacy Principles framework for registered NDIS providers. Please have legal or compliance advisors verify specific state-based health records provisions before official deployment.
+          </p>
+        </div>
+
+        <div class="prose max-w-none text-ink text-base sm:text-lg leading-relaxed space-y-8">
+          <section class="space-y-3">
+            <h2 class="text-2xl font-bold text-green-900">1. Our Commitment to Your Privacy</h2>
+            <p>
+              Empowerwell Support Pty Ltd (ABN 88 681 094 342, NDIS Registration 4-LCYP0SK) is dedicated to protecting the privacy, confidentiality, and dignity of our participants, their family members, carers, and staff. We adhere strictly to the <em>Privacy Act 1988</em> (Cth), the Australian Privacy Principles (APPs), and the NDIS Quality and Safeguards Commission rules.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-2xl font-bold text-green-900">2. What Information We Collect</h2>
+            <p>
+              To provide safe, effective, and person-centred disability support, we may collect:
+            </p>
+            <ul class="list-disc list-inside space-y-1.5 text-base">
+              <li>Identifying details (such as full name, date of birth, and contact information);</li>
+              <li>NDIS participant number, plan management arrangements, and funding allocations;</li>
+              <li>Health and medical information, including support requirements, emergency contacts, doctor/allied health reports, and behavioural support plans;</li>
+              <li>Cultural background, language preferences, and personal lifestyle routines;</li>
+              <li>Records of support notes, incident reports, and feedback submitted to our team.</li>
+            </ul>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-2xl font-bold text-green-900">3. Why We Collect Your Information</h2>
+            <p>
+              We collect this information strictly to:
+            </p>
+            <ul class="list-disc list-inside space-y-1.5 text-base">
+              <li>Assess your eligibility and develop safe, individualised Service Agreements;</li>
+              <li>Match you with compatible, skilled support workers;</li>
+              <li>Deliver agreed daily living, community, and Supported Independent Living (SIL) supports;</li>
+              <li>Process NDIS billing and invoice claims through your Plan Manager or the NDIA;</li>
+              <li>Comply with legislative reporting requirements under the NDIS Act 2013 and mandatory quality audit standards.</li>
+            </ul>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-2xl font-bold text-green-900">4. How We Secure Your Data</h2>
+            <p>
+              Your personal and health records are stored securely using encrypted, password-protected systems with role-based access controls. Physical records are kept in locked, access-restricted cabinets. Only authorized support coordinators and carers directly involved in your care have access to your personal files.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-2xl font-bold text-green-900">5. Accessing and Correcting Your Information</h2>
+            <p>
+              You have the right to request access to the personal information we hold about you at any time, and to ask us to correct or update any inaccuracies. Requests can be made in writing or by phone to our Privacy Officer.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-2xl font-bold text-green-900">6. Contacting Our Privacy Officer</h2>
+            <p>
+              If you have any questions, concerns, or complaints regarding how your personal information is managed, please contact:
+            </p>
+            <div class="p-4 rounded-[12px] bg-surface-tint border border-green-200 text-base">
+              <p class="font-bold text-green-900">Privacy Officer · Empowerwell Support Pty Ltd</p>
+              <p>Email: <a href={`mailto:${SITE.email}`} class="text-purple-700 underline font-bold">{SITE.email}</a></p>
+              <p>Phone: <a href={`tel:${SITE.phoneHref}`} class="text-purple-700 underline font-bold">{SITE.phone}</a></p>
+              <p>Address: {SITE.suburb} {SITE.state} {SITE.postcode}, Australia</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,179 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Section from "../components/ui/Section.astro";
+import Card from "../components/ui/Card.astro";
+import Badge from "../components/ui/Badge.astro";
+import Button from "../components/ui/Button.astro";
+import { SITE, TEAM } from "../content/site";
+import { VALUES } from "../content/values";
+---
+
+<BaseLayout
+  title={`About Us · ${SITE.brandName} · NDIS Provider in Western Sydney`}
+  description="Learn about Empowerwell Support Pty Ltd, our mission, vision, values, and our directors Aiwen Kuel and Lual Chol."
+>
+  {/* Header Hero */}
+  <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
+    <Container>
+      <div class="max-w-3xl">
+        <Badge variant="tint" class="mb-4">Our Story & Purpose</Badge>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-green-900 mb-6 leading-tight">
+          Empowering People with Disability to Lead Rich, Fulfilling Lives
+        </h1>
+        <p class="text-xl text-ink leading-relaxed">
+          Founded in Dharruk in Western Sydney, Empowerwell Support Pty Ltd was created to provide a higher standard of compassionate, dependable, and person-centred disability support.
+        </p>
+      </div>
+    </Container>
+  </Section>
+
+  {/* Mission & Vision Split */}
+  <Section variant="tint">
+    <Container>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Card variant="white" padding="lg" class="border-t-4 border-green-900">
+          <Badge variant="green" class="mb-4">Our Mission</Badge>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-green-900 mb-4">
+            Holistic, Person-Centred Care
+          </h2>
+          <p class="text-lg text-ink leading-relaxed">
+            {SITE.mission}
+          </p>
+        </Card>
+
+        <Card variant="white" padding="lg" class="border-t-4 border-purple-700">
+          <Badge variant="purple" class="mb-4">Our Vision</Badge>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-purple-700 mb-4">
+            Choice, Resilience & Dignity
+          </h2>
+          <p class="text-lg text-ink leading-relaxed">
+            {SITE.vision}
+          </p>
+        </Card>
+      </div>
+    </Container>
+  </Section>
+
+  {/* Our Story / Founder Note */}
+  <Section variant="surface">
+    <Container>
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div>
+          <Badge variant="tint" class="mb-3">Our Background</Badge>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-6">
+            Built from Compassion and Lived Community Experience
+          </h2>
+        </div>
+
+        <div class="prose max-w-none text-lg text-ink leading-relaxed space-y-5">
+          <p>
+            Empowerwell Support was founded by Aiwen Kuel and Lual Chol with a shared belief: that everyone in our community, regardless of ability or age, has the right to be treated with unconditional dignity, respect, and autonomy.
+          </p>
+          <p>
+            Too often, disability support can feel transactional or rigid. We built Empowerwell to offer a warmer, more responsive alternative. We listen first, learn about your daily passions and cultural values, and match you with reliable support workers who genuinely care about your personal growth.
+          </p>
+          
+          {/* TODO Marker for Directors to add further biographical narrative */}
+          <div class="p-5 rounded-[12px] bg-surface-tint border border-green-200 text-sm text-ink space-y-2">
+            <p class="font-bold text-green-900">
+              Note for Directors (TODO):
+            </p>
+            <p class="text-muted">
+              Aiwen & Lual: This section is ready for any additional personal background, community milestones, or quotes you would like to include about your journey establishing Empowerwell Support. You can update this anytime directly in <code class="bg-white px-2 py-0.5 rounded text-xs font-mono">src/content/site.ts</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  {/* Leadership Team */}
+  <Section variant="tint">
+    <Container>
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <Badge variant="purple" class="mb-3">Our Leadership</Badge>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">
+          Meet Our Directors
+        </h2>
+        <p class="text-lg text-ink">
+          Aiwen Kuel and Lual Chol are hands-on directors deeply committed to our participants, families, and support staff.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {
+          TEAM.map((member) => (
+            <Card variant="white" padding="lg" class="flex flex-col items-center text-center space-y-4">
+              <div class="relative w-44 h-44 rounded-full overflow-hidden border-4 border-green-100 bg-surface-tint shadow-soft">
+                <img
+                  src={member.image}
+                  alt={member.imageAlt}
+                  class="w-full h-full object-cover"
+                  width="400"
+                  height="480"
+                  loading="lazy"
+                />
+              </div>
+
+              <div>
+                <h3 class="text-2xl font-bold text-green-900">
+                  {member.name}
+                </h3>
+                <p class="text-sm font-bold text-purple-700 uppercase tracking-wider mt-1">
+                  {member.role}
+                </p>
+              </div>
+
+              <p class="text-base text-ink leading-relaxed">
+                {member.bio}
+              </p>
+            </Card>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  {/* Values Grid */}
+  <Section variant="surface">
+    <Container>
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <Badge variant="tint" class="mb-3">Our Ethical Foundation</Badge>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-4">
+          The Values We Live Every Day
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          VALUES.map((val) => (
+            <Card variant="white" padding="md" class="border border-green-100">
+              <h3 class="text-xl font-bold text-purple-700 mb-1">
+                {val.name}
+              </h3>
+              <p class="text-xs font-bold text-green-900 uppercase tracking-wider mb-2">
+                {val.tagline}
+              </p>
+              <p class="text-base text-ink leading-relaxed">
+                {val.description}
+              </p>
+            </Card>
+          ))
+        }
+      </div>
+
+      <div class="mt-16 p-8 rounded-[12px] bg-purple-700 text-white text-center max-w-3xl mx-auto space-y-4">
+        <h3 class="text-2xl font-bold">Have Questions for Our Directors?</h3>
+        <p class="text-purple-100 text-lg">
+          We would love to speak with you about how we can support you or your participant.
+        </p>
+        <div class="pt-2">
+          <Button href="/contact" variant="lime" size="md">
+            Contact Aiwen & Lual
+          </Button>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>
