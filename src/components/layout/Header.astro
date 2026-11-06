@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import emblem from "../../assets/brand/emblem.png";
 import { CTA, NAV, SITE } from "../../content/site";
-import MobileMenu from "../islands/MobileMenu";
+import MobileMenu from "./MobileMenu.astro";
 
 interface Props {
   currentPath?: string;
@@ -27,7 +27,6 @@ const registrationLabel = `Registered NDIS Provider · ${SITE.ndisRegistration}`
           height={Math.round((56 * emblem.height) / emblem.width)}
           densities={[1, 2]}
           loading="eager"
-          fetchpriority="high"
           class="h-10 min-[400px]:h-11 sm:h-12 w-auto shrink-0"
         />
         <span class="flex flex-col leading-tight min-w-0">
@@ -79,7 +78,6 @@ const registrationLabel = `Registered NDIS Provider · ${SITE.ndisRegistration}`
         </a>
 
         <MobileMenu
-          client:load
           navLinks={NAV}
           currentPath={currentPath}
           phone={SITE.phone}

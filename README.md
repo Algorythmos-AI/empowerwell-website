@@ -12,7 +12,7 @@ Marketing and referral website for Empowerwell Support Pty Ltd, a registered NDI
 
 ---
 
-Static site built with **Astro 7**, **TypeScript (strict)**, **Tailwind CSS v4** (`@theme` brand tokens), **React islands** for the three stateful components, and self-hosted fonts (`@fontsource`). Built for **WCAG 2.2 AA**.
+Static site built with **Astro 7**, **TypeScript (strict)**, **Tailwind CSS v4** (`@theme` brand tokens) and self-hosted fonts (`@fontsource`). React runs only on the contact page (the enquiry form); the menu is a native `<dialog>` and the FAQs are native `<details>`. Built for **WCAG 2.2 AA**.
 
 ## Quick start
 
@@ -41,17 +41,17 @@ npm run preview   # serve the production build
 ├── public/
 │   ├── favicon.ico, favicon-16/32.png, apple-touch-icon.png, icon-192/512.png   # generated from the logo
 │   ├── logo.png, og-image.png                                                  # generated from the logo
-│   ├── robots.txt
 │   └── images/                     # illustrated SVG placeholders, awaiting real photography
+├── site-url.mjs                    # public origin: SITE_URL → Vercel production domain → empowerwell.com.au
 ├── scripts/
 │   ├── build-brand-assets.mjs      # regenerates every logo-derived asset (npm run brand-assets)
 │   └── verify-dist.mjs             # post-build spec checks (part of npm run check)
 ├── src/
 │   ├── assets/brand/               # logo-source.png (client file) + generated emblem / lockup
 │   ├── components/
-│   │   ├── ui/                     # Button, Card, Section, Container, Badge, Input, Select, Textarea
-│   │   ├── layout/                 # Header (with no-JS nav), Footer, SEO (meta, canonical, JSON-LD)
-│   │   └── islands/                # MobileMenu, FaqAccordion, EnquiryForm (React)
+│   │   ├── ui/                     # Button, Card, Section, Container, Badge, FaqList, HelpContacts
+│   │   ├── layout/                 # Header (with no-JS nav), MobileMenu (<dialog>), Footer, SEO
+│   │   └── islands/                # EnquiryForm (React, contact page only)
 │   ├── content/                    # SINGLE SOURCE OF TRUTH for copy and business facts
 │   │   ├── site.ts                 # business details, NAV, FOOTER, TEAM, PLACEHOLDERS, BRAND_COLORS
 │   │   ├── pages.ts                # per-page SEO title and description
@@ -59,7 +59,7 @@ npm run preview   # serve the production build
 │   ├── layouts/BaseLayout.astro    # html shell, icons, font preloads, skip link
 │   ├── lib/submitEnquiry.ts        # validation, honeypot, POST with timeout, mailto fallback (+ tests)
 │   ├── pages/                      # index, about, services, who-we-support, ndis-info, contact,
-│   │                               # privacy, feedback, 404, site.webmanifest
+│   │                               # privacy, feedback, 404, site.webmanifest, robots.txt
 │   └── styles/global.css           # @theme tokens and layered base styles
 ├── astro.config.mjs                # static output, clean URLs (build.format 'file'), sitemap
 └── vercel.json                     # security headers, asset caching, docs-only build skip

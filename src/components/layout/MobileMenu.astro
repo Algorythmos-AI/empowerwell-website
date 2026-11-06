@@ -1,0 +1,134 @@
+---
+import type { NavLink } from "../../content/site";
+
+interface Props {
+  navLinks: NavLink[];
+  currentPath: string;
+  phone: string;
+  phoneHref: string;
+  referral: NavLink;
+  brandName: string;
+  registrationLabel: string;
+}
+
+const { navLinks, currentPath, phone, phoneHref, referral, brandName, registrationLabel } = Astro.props;
+const isActive = (href: string) => currentPath === href || (href !== "/" && currentPath.startsWith(`${href}/`));
+---
+
+<!--
+  Mobile navigation below the xl breakpoint (1280px), built on a native modal <dialog>:
+  the browser renders it in the top layer (so the header's backdrop-filter can't clip it), makes the
+  rest of the page inert, closes it on Escape and returns focus to the toggle. No framework needed.
+  Without JavaScript the toggle is hidden (.js-only) and Header.astro renders a <noscript> nav instead.
+-->
+<div class="xl:hidden js-only">
+  <button
+    type="button"
+    data-menu-open
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls="mobile-navigation"
+    class="inline-flex items-center justify-center p-2.5 rounded-full text-purple-700 hover:bg-purple-50 focus-visible:outline-3 focus-visible:outline-purple-700 min-w-[44px] min-h-[44px] cursor-pointer"
+  >
+    <span class="sr-only">Open menu</span>
+    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <dialog
+    id="mobile-navigation"
+    aria-label="Site menu"
+    class="mobile-menu m-0 ml-auto h-dvh max-h-dvh w-full max-w-sm bg-surface p-6 shadow-2xl backdrop:bg-ink/40 backdrop:backdrop-blur-xs"
+  >
+    <div class="flex h-full flex-col justify-between gap-6">
+      <div>
+        <div class="flex items-center justify-between pb-6 border-b border-green-100">
+          <span class="font-heading font-extrabold text-green-900 text-lg">{brandName}</span>
+          <button
+            type="button"
+            data-menu-close
+            class="p-2 text-purple-700 hover:bg-purple-50 rounded-full focus-visible:outline-3 focus-visible:outline-purple-700 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
+          >
+            <span class="sr-only">Close menu</span>
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <nav class="mt-6" aria-label="Main">
+          <ul class="flex flex-col gap-1" role="list">
+            {
+              navLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    class:list={[
+                      "px-4 py-3 rounded-[12px] text-lg font-bold hover:text-purple-700 hover:bg-surface-tint focus-visible:outline-3 focus-visible:outline-purple-700 min-h-[44px] flex items-center transition-colors",
+                      isActive(link.href) ? "text-purple-700 bg-surface-tint" : "text-ink",
+                    ]}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-green-100 space-y-3">
+        <a
+          href={phoneHref}
+          class="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-surface-tint text-purple-700 font-bold border-2 border-purple-700 hover:bg-purple-50 min-h-[44px] transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+          </svg>
+          <span>Call {phone}</span>
+        </a>
+        <a
+          href={referral.href}
+          class="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-green-900 text-white font-bold hover:bg-green-800 min-h-[44px] shadow-soft transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
+        >
+          {referral.label}
+        </a>
+        <p class="pt-2 text-center text-sm text-muted">{registrationLabel}</p>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  const dialog = document.getElementById("mobile-navigation") as HTMLDialogElement | null;
+  const openBtn = document.querySelector<HTMLButtonElement>("[data-menu-open]");
+
+  if (dialog && openBtn) {
+    // Keep page state in step with the dialog however it closes (button, link, backdrop, Escape,
+    // Android back gesture): watch the `open` attribute rather than relying on the close event.
+    const sync = () => {
+      const open = dialog.open;
+      document.documentElement.classList.toggle("menu-open", open);
+      openBtn.setAttribute("aria-expanded", String(open));
+      if (!open && (document.activeElement === document.body || dialog.contains(document.activeElement))) {
+        openBtn.focus();
+      }
+    };
+    new MutationObserver(sync).observe(dialog, { attributes: true, attributeFilter: ["open"] });
+
+    openBtn.addEventListener("click", () => dialog.showModal());
+
+    // Close button, any link inside, or a click on the backdrop (outside the panel).
+    dialog.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      if (target === dialog || target.closest("[data-menu-close]") || target.closest("a")) dialog.close();
+    });
+
+    // Close if the viewport grows to the desktop layout.
+    window.matchMedia("(min-width: 80rem)").addEventListener("change", (e) => {
+      if (e.matches && dialog.open) dialog.close();
+    });
+  }
+</script>

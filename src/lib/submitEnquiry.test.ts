@@ -140,3 +140,31 @@ describe("submitEnquiry", () => {
     expect(result.delivery).toBe("mailto");
   });
 });
+
+describe("audit fixes", () => {
+  it("does not require a plan type for feedback or complaints", async () => {
+    const { FEEDBACK_OPTION } = await import("./submitEnquiry");
+    expect(validateEnquiryForm(valid({ serviceOfInterest: FEEDBACK_OPTION, planType: "" })).planType).toBeUndefined();
+    expect(validateEnquiryForm(valid({ planType: "" })).planType).toBeDefined();
+  });
+
+  it("rejects messages over the maximum length", async () => {
+    const { MESSAGE_MAX_LENGTH } = await import("./submitEnquiry");
+    expect(validateEnquiryForm(valid({ message: "a".repeat(MESSAGE_MAX_LENGTH + 1) })).message).toBeDefined();
+    expect(validateEnquiryForm(valid({ message: "a".repeat(MESSAGE_MAX_LENGTH) })).message).toBeUndefined();
+  });
+
+  it("writes readable labels, not internal codes, in the email", () => {
+    const body = decodeURIComponent(generateEnquiryMailto(valid({ role: "carer_family", planType: "ndia" }), RECIPIENT).split("&body=")[1]);
+    expect(body).toContain("Family member or carer");
+    expect(body).toContain("Agency-managed (NDIA)");
+    expect(body).not.toContain("carer_family");
+  });
+
+  it("keeps the mailto link under 2,000 characters for a maximum-length message", async () => {
+    const { MESSAGE_MAX_LENGTH } = await import("./submitEnquiry");
+    const url = generateEnquiryMailto(valid({ message: "word ".repeat(MESSAGE_MAX_LENGTH / 5) }), RECIPIENT);
+    expect(url.length).toBeLessThanOrEqual(1900);
+    expect(decodeURIComponent(url)).toContain("shortened");
+  });
+});

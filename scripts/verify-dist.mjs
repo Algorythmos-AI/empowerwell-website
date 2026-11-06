@@ -21,7 +21,8 @@ import { parse } from "node-html-parser";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const dist = path.join(root, "dist");
-const ORIGIN = "https://empowerwell.com.au";
+const { resolveSiteUrl } = await import(new URL("../site-url.mjs", import.meta.url).href);
+const ORIGIN = resolveSiteUrl();
 
 const errors = [];
 const warnings = [];
@@ -116,6 +117,8 @@ for (const file of pages) {
   if (/https?:\/\/[^"'\s)]*(unsplash|picsum|placehold|placeholder\.com|loremflickr|pravatar|dummyimage)/i.test(html))
     fail(file, "references a remote placeholder image service");
   if (/9831\s?0000|0400\s?000\s?000|0298310000/.test(html)) fail(file, "contains a dummy phone number");
+  if (/\bTODO\b|Note for Directors|lorem ipsum/i.test(doc.querySelector("body")?.text ?? "")) fail(file, "visible TODO / placeholder note in page text");
+  if (/action="mailto:/i.test(html)) fail(file, "form posts to mailto: (insecure; browsers flag it)");
 
   for (const img of doc.querySelectorAll("img")) {
     const src = img.getAttribute("src") ?? "";

@@ -6,6 +6,8 @@ import {
   type ValidationErrors,
   validateEnquiryForm,
   submitEnquiry,
+  FEEDBACK_OPTION,
+  MESSAGE_MAX_LENGTH,
 } from "../../lib/submitEnquiry";
 import { FORM_EXAMPLES } from "../../content/forms";
 
@@ -16,7 +18,6 @@ interface ServiceOption {
 
 interface EnquiryFormProps {
   services: ServiceOption[];
-  defaultServiceSlug?: string;
   /** Inbox for the mailto fallback and the no-JS form action (SITE.email). */
   recipient: string;
   /** POST endpoint (SITE.formEndpoint); empty means mailto fallback only. */
@@ -25,7 +26,7 @@ interface EnquiryFormProps {
   phoneHref: string;
 }
 
-export default function EnquiryForm({ services, defaultServiceSlug, recipient, endpoint, phone, phoneHref }: EnquiryFormProps) {
+export default function EnquiryForm({ services, recipient, endpoint, phone, phoneHref }: EnquiryFormProps) {
   const [formData, setFormData] = useState<EnquiryFormData>({
     fullName: "",
     phone: "",
@@ -44,33 +45,52 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<SubmissionResult | null>(null);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Before hydration the browser's own validation applies; once React runs, it takes over.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setHydrated(true), []);
+
+  const scrollBehavior = (): ScrollBehavior =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
+  // Bumped on every failed submit, so the summary is focused after React has rendered it.
+  const [failedSubmits, setFailedSubmits] = useState(0);
+  useEffect(() => {
+    if (failedSubmits === 0) return;
+    errorSummaryRef.current?.focus({ preventScroll: true });
+    errorSummaryRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: "center" });
+  }, [failedSubmits]);
 
   // Move focus (and the viewport) to the outcome so keyboard, screen-reader and mobile users see it.
   useEffect(() => {
     if (!result) return;
     const heading = resultHeadingRef.current;
     heading?.focus({ preventScroll: true });
-    heading?.scrollIntoView({ behavior: "smooth", block: "center" });
+    heading?.scrollIntoView({ behavior: scrollBehavior(), block: "center" });
   }, [result]);
 
   // Check URL query parameters on mount to pre-select service
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const serviceParam = params.get("service") || defaultServiceSlug;
-      if (serviceParam) {
+      const serviceParam = params.get("service");
+      if (serviceParam?.toLowerCase() === "feedback") {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setFormData((prev) => ({ ...prev, serviceOfInterest: FEEDBACK_OPTION }));
+      } else if (serviceParam) {
         const matched = services.find(
           (s) => s.slug.toLowerCase() === serviceParam.toLowerCase() || s.title.toLowerCase() === serviceParam.toLowerCase()
         );
         if (matched) {
           // The ?service= query is only readable after hydration (static HTML has no URL params),
           // so syncing it into state from an effect is intended here.
-          // eslint-disable-next-line react-hooks/set-state-in-effect
           setFormData((prev) => ({ ...prev, serviceOfInterest: matched.title }));
         }
       }
     }
-  }, [services, defaultServiceSlug]);
+  }, [services]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -102,12 +122,8 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
       setErrors(clientErrors);
       setIsSubmitting(false);
 
-      // Focus first error field for screen reader accessibility
-      const firstErrorKey = Object.keys(clientErrors)[0];
-      const element = document.getElementById(firstErrorKey);
-      if (element) {
-        element.focus();
-      }
+      // One summary announcement (focused in an effect), then the visitor can jump to each field.
+      setFailedSubmits((n) => n + 1);
       return;
     }
 
@@ -192,39 +208,77 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
           <div className="bg-surface-tint p-5 rounded-[12px] border border-green-200 text-left max-w-lg mx-auto mb-8 space-y-2 text-sm sm:text-base">
             <p className="font-bold text-green-900">What happens next</p>
             <ul className="list-disc list-inside text-ink space-y-1">
-              <li>Our intake team will review your enquiry.</li>
+              <li>We will read your enquiry.</li>
               <li>
                 We will contact you by {formData.preferredContact === "either" ? "phone or email" : formData.preferredContact} to arrange a free meet and greet.
               </li>
-              <li>There is no obligation or commitment.</li>
+              <li>There is no obligation.</li>
             </ul>
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={resetForm}
-          className="text-purple-700 font-bold hover:underline inline-flex items-center gap-1.5 min-h-[44px] focus-visible:outline-3 focus-visible:outline-purple-700 rounded-md px-2"
-        >
-          <span>{sent ? "Submit another enquiry" : "Edit or start again"}</span>
-          <ArrowRight className="w-4 h-4" aria-hidden="true" />
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          {!sent && (
+            <button
+              type="button"
+              onClick={() => setResult(null)}
+              className="text-purple-700 font-bold underline underline-offset-4 inline-flex items-center gap-1.5 min-h-[44px] focus-visible:outline-3 focus-visible:outline-purple-700 rounded-md px-2"
+            >
+              <span>Edit my details</span>
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={resetForm}
+            className="text-purple-700 font-bold hover:underline inline-flex items-center gap-1.5 min-h-[44px] focus-visible:outline-3 focus-visible:outline-purple-700 rounded-md px-2"
+          >
+            <span>{sent ? "Send another enquiry" : "Clear the form and start again"}</span>
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
       </div>
     );
   }
 
-  // Without JavaScript the browser posts the form directly (never as a GET, which would put
-  // personal details in the URL): to the endpoint when configured, otherwise as an email.
+  const errorEntries = Object.entries(errors).filter(([key, msg]) => key !== "general" && msg) as [string, string][];
+
+  // Without JavaScript: with an endpoint, the browser POSTs the form there (never a GET, which would put
+  // personal details in the URL). Without an endpoint the form is hidden (js-only) and the page's
+  // <noscript> block offers phone and email instead.
   return (
     <form
       onSubmit={handleSubmit}
-      noValidate
+      noValidate={hydrated}
       method="post"
-      action={endpoint || `mailto:${recipient}`}
-      encType={endpoint ? undefined : "text/plain"}
-      className="rounded-[12px] bg-white border border-border-card p-6 sm:p-10 shadow-soft"
-      aria-label="Make an NDIS Referral or Enquiry"
+      action={endpoint || undefined}
+      className={`rounded-[12px] bg-white border border-border-card p-6 sm:p-10 shadow-soft${endpoint ? "" : " js-only"}`}
+      aria-labelledby="enquiry-form-heading"
     >
+      <p className="text-base text-ink mb-6">
+        Fields marked <span className="text-purple-700 font-bold">*</span> are required.
+      </p>
+
+      {errorEntries.length > 0 && (
+        <div
+          ref={errorSummaryRef}
+          tabIndex={-1}
+          role="alert"
+          className="mb-6 p-5 rounded-[12px] bg-purple-50 border-2 border-purple-700 text-ink focus:outline-none"
+        >
+          <p className="font-bold text-purple-900">
+            Please fix {errorEntries.length === 1 ? "1 thing" : `${errorEntries.length} things`} before sending:
+          </p>
+          <ul className="mt-2 list-disc pl-5 space-y-1">
+            {errorEntries.map(([field, message]) => (
+              <li key={field}>
+                <a href={`#${field}`} className="text-purple-700 font-bold underline underline-offset-4">
+                  {message}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {/* Honeypot field for bot protection (hidden from assistive tech and humans) */}
       <div className="hidden" aria-hidden="true">
         <label htmlFor="website-url-guard">Leave this field blank</label>
@@ -253,7 +307,7 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
         {/* Name & Phone Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="fullName" className="text-sm font-bold text-ink">
+            <label htmlFor="fullName" className="text-base font-bold text-ink">
               Full Name <span className="text-purple-700" aria-hidden="true">*</span>
             </label>
             <input
@@ -261,6 +315,8 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               name="fullName"
               type="text"
               required
+              autoComplete="name"
+              maxLength={100}
               value={formData.fullName}
               onChange={handleChange}
               placeholder="e.g. Jordan Smith"
@@ -271,14 +327,14 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
                 focus-visible:outline-3 focus-visible:outline-purple-700`}
             />
             {errors.fullName && (
-              <p id="fullName-error" className="text-xs font-bold text-purple-700" role="alert">
+              <p id="fullName-error" className="text-base font-bold text-purple-700">
                 {errors.fullName}
               </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="phone" className="text-sm font-bold text-ink">
+            <label htmlFor="phone" className="text-base font-bold text-ink">
               Phone Number <span className="text-purple-700" aria-hidden="true">*</span>
             </label>
             <input
@@ -286,6 +342,9 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               name="phone"
               type="tel"
               required
+              autoComplete="tel"
+              inputMode="tel"
+              maxLength={20}
               value={formData.phone}
               onChange={handleChange}
               placeholder={`e.g. ${FORM_EXAMPLES.mobile}`}
@@ -296,11 +355,11 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
                 focus-visible:outline-3 focus-visible:outline-purple-700`}
             />
             {errors.phone ? (
-              <p id="phone-error" className="text-xs font-bold text-purple-700" role="alert">
+              <p id="phone-error" className="text-base font-bold text-purple-700">
                 {errors.phone}
               </p>
             ) : (
-              <p id="phone-help" className="text-xs text-muted">
+              <p id="phone-help" className="text-sm text-muted">
                 Australian mobile or landline
               </p>
             )}
@@ -310,7 +369,7 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
         {/* Email & Role Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-sm font-bold text-ink">
+            <label htmlFor="email" className="text-base font-bold text-ink">
               Email Address <span className="text-purple-700" aria-hidden="true">*</span>
             </label>
             <input
@@ -318,6 +377,8 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               name="email"
               type="email"
               required
+              autoComplete="email"
+              maxLength={120}
               value={formData.email}
               onChange={handleChange}
               placeholder={FORM_EXAMPLES.email}
@@ -328,14 +389,14 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
                 focus-visible:outline-3 focus-visible:outline-purple-700`}
             />
             {errors.email && (
-              <p id="email-error" className="text-xs font-bold text-purple-700" role="alert">
+              <p id="email-error" className="text-base font-bold text-purple-700">
                 {errors.email}
               </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="role" className="text-sm font-bold text-ink">
+            <label htmlFor="role" className="text-base font-bold text-ink">
               I am a... <span className="text-purple-700" aria-hidden="true">*</span>
             </label>
             <select
@@ -357,7 +418,7 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               <option value="other">Health Professional / Advocate / Other</option>
             </select>
             {errors.role && (
-              <p id="role-error" className="text-xs font-bold text-purple-700" role="alert">
+              <p id="role-error" className="text-base font-bold text-purple-700">
                 {errors.role}
               </p>
             )}
@@ -367,7 +428,7 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
         {/* Plan Type & Service of Interest Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="planType" className="text-sm font-bold text-ink">
+            <label htmlFor="planType" className="text-base font-bold text-ink">
               NDIS Plan Management Type <span className="text-purple-700" aria-hidden="true">*</span>
             </label>
             <select
@@ -386,17 +447,17 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               <option value="plan">Plan-Managed</option>
               <option value="self">Self-Managed</option>
               <option value="ndia">NDIA-Managed (Agency Managed)</option>
-              <option value="exploring">Exploring NDIS / Awaiting Plan</option>
+              <option value="exploring">Not sure / still applying</option>
             </select>
             {errors.planType && (
-              <p id="planType-error" className="text-xs font-bold text-purple-700" role="alert">
+              <p id="planType-error" className="text-base font-bold text-purple-700">
                 {errors.planType}
               </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="serviceOfInterest" className="text-sm font-bold text-ink">
+            <label htmlFor="serviceOfInterest" className="text-base font-bold text-ink">
               Primary Service of Interest <span className="text-purple-700" aria-hidden="true">*</span>
             </label>
             <select
@@ -417,10 +478,11 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
                   {s.title}
                 </option>
               ))}
-              <option value="Multiple Supports / General Enquiry">Multiple Supports / General Advice</option>
+              <option value="Multiple Supports / General Enquiry">More than one / not sure yet</option>
+              <option value={FEEDBACK_OPTION}>{FEEDBACK_OPTION}</option>
             </select>
             {errors.serviceOfInterest && (
-              <p id="serviceOfInterest-error" className="text-xs font-bold text-purple-700" role="alert">
+              <p id="serviceOfInterest-error" className="text-base font-bold text-purple-700">
                 {errors.serviceOfInterest}
               </p>
             )}
@@ -438,6 +500,11 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               id="ndisNumber"
               name="ndisNumber"
               type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              maxLength={9}
+              pattern="[0-9]{9}"
+              title="Your 9-digit NDIS number"
               value={formData.ndisNumber}
               onChange={handleChange}
               placeholder="e.g. 430000000"
@@ -450,37 +517,37 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               <legend className="text-sm font-bold text-ink mb-2">
                 Preferred Contact Method
               </legend>
-              <div className="flex items-center gap-6 min-h-[44px]">
-                <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-medium text-ink">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-1 min-h-[44px]">
+                <label className="inline-flex items-center gap-2 min-h-[44px] cursor-pointer text-base font-medium text-ink">
                   <input
                     type="radio"
                     name="preferredContact"
                     value="phone"
                     checked={formData.preferredContact === "phone"}
                     onChange={handleChange}
-                    className="w-4 h-4 text-purple-700 focus:ring-purple-700"
+                    className="w-5 h-5 accent-purple-700"
                   />
                   <span>Phone</span>
                 </label>
-                <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-medium text-ink">
+                <label className="inline-flex items-center gap-2 min-h-[44px] cursor-pointer text-base font-medium text-ink">
                   <input
                     type="radio"
                     name="preferredContact"
                     value="email"
                     checked={formData.preferredContact === "email"}
                     onChange={handleChange}
-                    className="w-4 h-4 text-purple-700 focus:ring-purple-700"
+                    className="w-5 h-5 accent-purple-700"
                   />
                   <span>Email</span>
                 </label>
-                <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-medium text-ink">
+                <label className="inline-flex items-center gap-2 min-h-[44px] cursor-pointer text-base font-medium text-ink">
                   <input
                     type="radio"
                     name="preferredContact"
                     value="either"
                     checked={formData.preferredContact === "either"}
                     onChange={handleChange}
-                    className="w-4 h-4 text-purple-700 focus:ring-purple-700"
+                    className="w-5 h-5 accent-purple-700"
                   />
                   <span>Either</span>
                 </label>
@@ -491,14 +558,15 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
 
         {/* Message */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="message" className="text-sm font-bold text-ink">
+          <label htmlFor="message" className="text-base font-bold text-ink">
             How can we support you? <span className="text-purple-700" aria-hidden="true">*</span>
           </label>
           <textarea
             id="message"
             name="message"
-            rows={4}
+            rows={5}
             required
+            maxLength={MESSAGE_MAX_LENGTH}
             value={formData.message}
             onChange={handleChange}
             placeholder="Tell us about the supports you are looking for, your preferred routine, or any specific goals..."
@@ -508,8 +576,11 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               ${errors.message ? "border-purple-700 ring-1 ring-purple-700" : "border-border-card hover:border-green-600"}
               focus-visible:outline-3 focus-visible:outline-purple-700`}
           />
+          <p className="text-sm text-muted text-right" aria-live="polite">
+            {formData.message.length}/{MESSAGE_MAX_LENGTH} characters
+          </p>
           {errors.message && (
-            <p id="message-error" className="text-xs font-bold text-purple-700" role="alert">
+            <p id="message-error" className="text-base font-bold text-purple-700">
               {errors.message}
             </p>
           )}
@@ -517,11 +588,11 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
 
         {/* Privacy Collection Notice & Consent Checkbox */}
         <div className="pt-2 border-t border-green-100 space-y-4">
-          <div className="p-4 rounded-[12px] bg-surface-tint border border-green-200 text-xs sm:text-sm text-ink leading-relaxed">
+          <div className="p-4 rounded-[12px] bg-surface-tint border border-green-200 text-base text-ink leading-relaxed">
             <p className="font-bold text-green-900 mb-1">Privacy Collection Notice</p>
             <p>
-              Empowerwell Support Pty Ltd collects your personal details solely to assess and respond to your NDIS support enquiry. We will never sell, rent, or disclose your information to third parties without your explicit consent, in compliance with the Australian Privacy Principles. For full information, please read our{" "}
-              <a href="/privacy" className="text-purple-700 font-bold underline hover:text-purple-900 focus-visible:outline-2 focus-visible:outline-purple-700 rounded">
+              We collect these details to answer your enquiry. We will not sell your information. We only share it with your consent, or when the law requires or allows it. Read our{" "}
+              <a href="/privacy" className="text-purple-700 font-bold underline hover:text-purple-900 focus-visible:outline-3 focus-visible:outline-purple-700 rounded">
                 Privacy Policy
               </a>.
             </p>
@@ -537,15 +608,15 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
               onChange={handleChange}
               aria-invalid={errors.consent ? "true" : "false"}
               aria-describedby={errors.consent ? "consent-error" : undefined}
-              className="w-5 h-5 mt-1 rounded text-green-900 border-border-card focus:ring-purple-700 focus:ring-offset-2 cursor-pointer shrink-0"
+              className="w-5 h-5 mt-1 accent-green-900 cursor-pointer shrink-0"
             />
-            <label htmlFor="consent" className="text-sm text-ink leading-snug cursor-pointer">
-              I consent to Empowerwell Support Pty Ltd contacting me to discuss this NDIS referral and storing my details securely.{" "}
+            <label htmlFor="consent" className="text-base text-ink leading-snug cursor-pointer">
+              I agree to Empowerwell Support contacting me about this enquiry and keeping my details safely.{" "}
               <span className="text-purple-700 font-bold" aria-hidden="true">*</span>
             </label>
           </div>
           {errors.consent && (
-            <p id="consent-error" className="text-xs font-bold text-purple-700" role="alert">
+            <p id="consent-error" className="text-base font-bold text-purple-700">
               {errors.consent}
             </p>
           )}
@@ -556,14 +627,14 @@ export default function EnquiryForm({ services, defaultServiceSlug, recipient, e
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-green-900 text-white font-heading font-extrabold text-lg hover:bg-green-800 active:bg-green-950 transition-all duration-150 shadow-soft disabled:opacity-50 cursor-pointer min-h-[48px] focus-visible:outline-3 focus-visible:outline-purple-700"
+            className="w-full sm:w-auto sm:min-w-[16rem] inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-green-900 text-white font-heading font-extrabold text-lg hover:bg-green-800 active:bg-green-950 transition-all duration-150 shadow-soft disabled:opacity-50 cursor-pointer min-h-[48px] focus-visible:outline-3 focus-visible:outline-purple-700"
           >
             {isSubmitting ? (
-              <span>Preparing Referral...</span>
+              <span>Sending…</span>
             ) : (
               <>
                 <Send className="w-5 h-5" aria-hidden="true" />
-                <span>Submit NDIS Referral</span>
+                <span>Send enquiry</span>
               </>
             )}
           </button>

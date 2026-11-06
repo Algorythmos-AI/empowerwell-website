@@ -40,6 +40,10 @@
   --font-heading: 'Nunito', sans-serif;
   --font-body: 'Atkinson Hyperlegible', sans-serif;
 
+  /* Smallest text size is 15px (at the 18px root) so fine print stays readable for older visitors. */
+  --text-xs: 0.8333rem;
+  --text-xs--line-height: 1.45;
+
   --radius-card: 12px;
   --radius-button: 9999px;
 
@@ -64,7 +68,19 @@
     color: var(--color-ink);
     background-color: var(--color-surface);
     scroll-behavior: smooth;
+    /* Keep focused elements and anchor targets clear of the sticky header (WCAG 2.4.11). */
+    scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /* Lock page scroll while the mobile menu dialog is open. */
+  html.menu-open {
+    overflow: hidden;
+  }
+
+  dialog.mobile-menu {
+    border: 0;
+    max-width: min(24rem, 100vw);
   }
 
   body {
@@ -122,6 +138,28 @@
 /* Controls that only work with JavaScript are hidden when it is unavailable (see BaseLayout). */
 html:not(.js) .js-only {
   display: none !important;
+}
+
+/* Short or heavily zoomed viewports: don't let the sticky header take over the screen. */
+@media (max-height: 30rem) {
+  body > header {
+    position: static;
+  }
+}
+
+/* Print: content only. */
+@media print {
+  body > header,
+  body > footer,
+  .skip-link,
+  .js-only,
+  noscript {
+    display: none !important;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
 }
 
 /* Smooth motion respect */

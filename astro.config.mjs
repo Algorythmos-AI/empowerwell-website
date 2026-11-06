@@ -3,9 +3,10 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { resolveSiteUrl } from './site-url.mjs';
 
-// Production origin. Keep in sync with SITE.websiteUrl in src/content/site.ts.
-const SITE_URL = 'https://empowerwell.com.au';
+// Public origin (see site-url.mjs). Exposed to the app as import.meta.env.SITE.
+const SITE_URL = resolveSiteUrl();
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({

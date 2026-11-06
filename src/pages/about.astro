@@ -20,7 +20,7 @@ import { VALUES } from "../content/values";
           Empowering People with Disability to Lead Rich, Fulfilling Lives
         </h1>
         <p class="text-xl text-ink leading-relaxed">
-          Founded in Dharruk in Western Sydney, Empowerwell Support Pty Ltd was created to provide a higher standard of compassionate, dependable, and person-centred disability support.
+          Empowerwell Support is a registered NDIS provider based in {SITE.suburb}, {SITE.state}. We support people with disability across {SITE.serviceAreas}.
         </p>
       </div>
     </Container>
@@ -60,7 +60,7 @@ import { VALUES } from "../content/values";
         <div>
           <Badge variant="tint" class="mb-3">Our Background</Badge>
           <h2 class="text-3xl sm:text-4xl font-extrabold text-green-900 mb-6">
-            Built from Compassion and Lived Community Experience
+            Why We Started Empowerwell
           </h2>
         </div>
 
@@ -69,18 +69,8 @@ import { VALUES } from "../content/values";
             Empowerwell Support was founded by Aiwen Kuel and Lual Chol with a shared belief: that everyone in our community, regardless of ability or age, has the right to be treated with unconditional dignity, respect, and autonomy.
           </p>
           <p>
-            Too often, disability support can feel transactional or rigid. We built Empowerwell to offer a warmer, more responsive alternative. We listen first, learn about your daily passions and cultural values, and match you with reliable support workers who genuinely care about your personal growth.
+            We listen first. We learn what matters to you, your routines and your culture. Then we work with you to plan supports that fit your life and your goals.
           </p>
-          
-          {/* TODO Marker for Directors to add further biographical narrative */}
-          <div class="p-5 rounded-[12px] bg-surface-tint border border-green-200 text-sm text-ink space-y-2">
-            <p class="font-bold text-green-900">
-              Note for Directors (TODO):
-            </p>
-            <p class="text-muted">
-              Aiwen & Lual: This section is ready for any additional personal background, community milestones, or quotes you would like to include about your journey establishing Empowerwell Support. You can update this anytime directly in <code class="bg-white px-2 py-0.5 rounded text-xs font-mono">src/content/site.ts</code>.
-            </p>
-          </div>
         </div>
       </div>
     </Container>
@@ -95,7 +85,7 @@ import { VALUES } from "../content/values";
           Meet Our Directors
         </h2>
         <p class="text-lg text-ink">
-          Aiwen Kuel and Lual Chol are hands-on directors deeply committed to our participants, families, and support staff.
+          {SITE.directors.join(" and ")} lead Empowerwell Support and stay closely involved with participants, families and our support workers.
         </p>
       </div>
 
@@ -150,7 +140,7 @@ import { VALUES } from "../content/values";
               <h3 class="text-xl font-bold text-purple-700 mb-1">
                 {val.name}
               </h3>
-              <p class="text-xs font-bold text-green-900 uppercase tracking-wider mb-2">
+              <p class="text-sm font-bold text-green-900 uppercase tracking-wider mb-2">
                 {val.tagline}
               </p>
               <p class="text-base text-ink leading-relaxed">
@@ -161,14 +151,14 @@ import { VALUES } from "../content/values";
         }
       </div>
 
-      <div class="mt-16 p-8 rounded-[12px] bg-purple-700 text-white text-center max-w-3xl mx-auto space-y-4">
-        <h3 class="text-2xl font-bold">Have Questions for Our Directors?</h3>
-        <p class="text-purple-100 text-lg">
+      <div class="mt-16 p-8 rounded-[12px] bg-surface-tint border border-green-200 text-center max-w-3xl mx-auto space-y-4">
+        <h2 class="text-2xl font-bold text-green-900">Have Questions for Our Directors?</h2>
+        <p class="text-ink text-lg">
           We would love to speak with you about how we can support you or your participant.
         </p>
         <div class="pt-2">
-          <Button href="/contact" variant="lime" size="md">
-            Contact Aiwen & Lual
+          <Button href="/contact" variant="primary" size="md">
+            Contact {SITE.directors.join(" and ")}
           </Button>
         </div>
       </div>

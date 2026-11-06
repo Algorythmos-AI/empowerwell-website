@@ -10,10 +10,12 @@ Org-wide rules (branching, commits, catalog) are in `Algorythmos-AI/.github-priv
 - **TypeScript**: strict mode (`tsconfig.json`).
 - **Styling**: Tailwind CSS v4. Brand tokens under `@theme` in `src/styles/global.css`. Base element
   styles must stay inside `@layer base`, because unlayered CSS overrides every Tailwind utility.
-- **Interactive islands**: React (`@astrojs/react`), used **only** for stateful components:
-  - `MobileMenu.tsx` (slide-out navigation below 1280px; portalled to `<body>`, focus-trapped)
-  - `FaqAccordion.tsx` (semantic `<details>/<summary>`)
-  - `EnquiryForm.tsx` (validated referral form)
+- **JavaScript budget**: ship as little as possible.
+  - `EnquiryForm.tsx` is the **only** React island (contact page only).
+  - `MobileMenu.astro` is a native modal `<dialog>` with a few lines of script (top layer, inert page,
+    Escape and focus return come from the browser).
+  - FAQs (`FaqList.astro`) are native `<details>/<summary>` with no JavaScript.
+  - Prefer HTML/CSS and small `<script>` blocks over new islands.
 - **Deployment**: Vercel (static) via `vercel.json`.
 
 ---
@@ -28,6 +30,10 @@ Org-wide rules (branching, commits, catalog) are in `Algorythmos-AI/.github-priv
     `TEAM`, `PLACEHOLDERS`, `BRAND_COLORS`
   - `src/content/pages.ts`: every page's `title` and `description` (unique, title ≤ 60 chars)
   - `src/content/services.ts`, `faqs.ts`, `values.ts`, `forms.ts`
+  - `HELP_CONTACTS` in `site.ts` (000, abuse hotline, NDIS Commission, TIS, NRS) via `HelpContacts.astro`
+- **Never publish claims the client hasn't confirmed**: response times, capacity, staff roles or
+  qualifications, vehicles, housing, suburbs, guarantees, testimonials or superlatives. The client's
+  brief (`../Reference/Empowerwell_Website_Brief.md`, outside the repo) is the source of truth.
 - `scripts/verify-dist.mjs` fails the build on hard-coded phone numbers, emails, ABN or NDIS
   registration outside `src/content/`.
 
@@ -54,8 +60,12 @@ Org-wide rules (branching, commits, catalog) are in `Algorythmos-AI/.github-priv
 - Semantic landmarks (`<header>`, `<main id="main-content">`, `<footer>`, labelled `<nav>`s).
 - Every image has meaningful `alt` text (or `alt=""` when decorative), plus `width` and `height`.
 - Must work at 400% zoom (320px wide) and **without JavaScript**: the `<noscript>` nav in
-  `Header.astro`, `js-only` on JS-dependent controls, and an enquiry form that POSTs (never a GET,
-  which would put personal details in the URL).
+  `Header.astro`, `js-only` on JS-dependent controls. The enquiry form POSTs to the endpoint when one
+  is set (never a GET, which would put personal details in the URL); without an endpoint it is
+  `js-only` and the page's `<noscript>` gives phone and email. Never use a `mailto:` form action.
+- Minimum text size is 15px (`text-xs` is redefined in `@theme`); body copy is `text-base` or larger.
+- Plain English for people with intellectual disability: short sentences, everyday words, explain
+  NDIS terms the first time they appear. Australian spelling.
 - `role="list"` on styled `<ul>`s is intentional (it restores list semantics in Safari/VoiceOver).
 
 ### D. Run `npm run check` before committing

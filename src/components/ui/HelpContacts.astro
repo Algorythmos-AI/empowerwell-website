@@ -1,0 +1,35 @@
+---
+import { HELP_CONTACTS } from "../../content/site";
+
+interface Props {
+  class?: string;
+  headingLevel?: "h2" | "h3";
+}
+
+const { class: className = "", headingLevel = "h2" } = Astro.props;
+const Heading = headingLevel;
+---
+
+<section
+  class:list={["rounded-[12px] bg-white border border-border-card p-6 sm:p-8 shadow-soft", className]}
+  aria-labelledby="help-contacts-heading"
+>
+  <Heading id="help-contacts-heading" class="text-2xl font-bold text-green-900 mb-4">{HELP_CONTACTS.heading}</Heading>
+  <ul class="grid grid-cols-1 md:grid-cols-2 gap-4" role="list">
+    {
+      HELP_CONTACTS.items.map((item) => (
+        <li class="rounded-[12px] bg-surface-tint border border-green-100 p-4">
+          <p class="font-bold text-ink">{item.name}</p>
+          <p class="text-base text-ink leading-relaxed mt-1">{item.detail}</p>
+          <a
+            href={item.href}
+            class="inline-flex items-center min-h-[44px] mt-1 text-lg font-extrabold text-purple-700 underline underline-offset-4 rounded-sm focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
+          >
+            <span class="sr-only">Call {item.name} on </span>
+            {item.phone}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

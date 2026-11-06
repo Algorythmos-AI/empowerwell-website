@@ -5,10 +5,13 @@ export const GET: APIRoute = () =>
   new Response(
     JSON.stringify(
       {
+        id: "/",
         name: SITE.legalName,
         short_name: SITE.brandName,
         description: SITE.tagline,
         start_url: "/",
+        scope: "/",
+        lang: "en-AU",
         display: "standalone",
         theme_color: BRAND_COLORS.themeColor,
         background_color: BRAND_COLORS.background,
