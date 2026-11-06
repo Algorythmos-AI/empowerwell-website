@@ -1,53 +1,52 @@
 ---
 import "../styles/global.css";
+import atkinsonRegular from "@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2?url";
+import nunitoHeading from "@fontsource/nunito/files/nunito-latin-800-normal.woff2?url";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import SEO from "../components/layout/SEO.astro";
+import type { PageMeta } from "../content/pages";
+import { BRAND_COLORS } from "../content/site";
 
 interface Props {
-  title?: string;
-  description?: string;
+  meta: PageMeta;
   ogImage?: string;
   ogType?: "website" | "article";
+  noindex?: boolean;
 }
 
-const { title, description, ogImage, ogType } = Astro.props;
-const currentPath = Astro.url.pathname;
+const { meta, ogImage, ogType, noindex } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/\.html$/, "");
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
-    <meta name="generator" content={Astro.generator} />
-    
-    <!-- Per-page Pre-rendered SEO and Social Cards -->
-    <SEO
-      title={title}
-      description={description}
-      canonicalUrl={Astro.url.href}
-      ogImage={ogImage}
-      ogType={ogType}
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Marks JS availability so JS-only controls (e.g. the menu toggle) hide when scripts are off. -->
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    <meta name="theme-color" content={BRAND_COLORS.themeColor} />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href={atkinsonRegular} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={nunitoHeading} as="font" type="font/woff2" crossorigin />
+
+    <SEO meta={meta} ogImage={ogImage} ogType={ogType} noindex={noindex} />
   </head>
   <body class="bg-surface text-ink antialiased flex flex-col min-h-screen">
-    <!-- Accessible Skip to Content Link -->
-    <a href="#main-content" class="skip-link">
-      Skip to main content
-    </a>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Sticky Header -->
     <Header currentPath={currentPath} />
 
-    <!-- Main Content Landmark -->
     <main id="main-content" class="flex-1 focus:outline-none" tabindex="-1">
       <slot />
     </main>
 
-    <!-- Footer -->
     <Footer />
   </body>
 </html>

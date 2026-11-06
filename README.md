@@ -1,133 +1,114 @@
-# Empowerwell Support Pty Ltd — Website Foundation
+# Empowerwell Support — website
 
-A production-grade, pre-rendered static website foundation for **Empowerwell Support Pty Ltd**, a registered NDIS provider located in Dharruk NSW 2770, servicing Western Sydney, Greater Sydney, and regional NSW.
+Marketing and referral website for Empowerwell Support Pty Ltd, a registered NDIS provider in Dharruk NSW 2770 serving Western Sydney, Greater Sydney and regional NSW.
 
-Built with **Astro 5** (static output), **TypeScript (strict)**, **Tailwind CSS v4** (`@theme` tokens), **React interactive islands** (`@astrojs/react`), and self-hosted fonts. Engineered for strict **WCAG 2.2 AA** accessibility and fast local performance.
+| | |
+|---|---|
+| **Status** | In build, not live |
+| **Owner** | [@Algorythmos-AI/maintainers](https://github.com/orgs/Algorythmos-AI/teams/maintainers) |
+| **Runs at** | Not deployed yet (target: <https://empowerwell.com.au>, Vercel, deploys from `main`) |
+| **Run locally** | `npm ci && npm run dev` |
+| **Context** | [Org repository map](https://github.com/Algorythmos-AI/.github-private/blob/main/profile/README.md#repository-map) · [Glossary](https://github.com/Algorythmos-AI/.github-private/blob/main/docs/glossary.md) |
 
 ---
 
-## Quick Start
+Static site built with **Astro 7**, **TypeScript (strict)**, **Tailwind CSS v4** (`@theme` brand tokens), **React islands** for the three stateful components, and self-hosted fonts (`@fontsource`). Built for **WCAG 2.2 AA**.
+
+## Quick start
+
+Requires Node 24 (see `.nvmrc`; Astro 7 needs Node 22.23.4 or later).
 
 ```bash
-# 1. Install dependencies
-npm install
-
-# 2. Start local development server (serves on http://localhost:3000)
-npm run dev
-
-# 3. Run full verification (Astro check + TypeScript lint + static build)
-npm run check
-
-# 4. Preview static production build
-npm run preview
+npm ci            # install exact locked dependencies
+npm run dev       # http://localhost:3000
+npm run check     # the full gate: astro check, tsc, ESLint, unit tests, build, dist verification
+npm run preview   # serve the production build
 ```
 
----
+`npm run check` must pass before every commit. It runs:
 
-## Project Structure
+| Step | What it catches |
+|---|---|
+| `astro check` | Type errors in `.astro` files |
+| `tsc --noEmit` + `eslint .` | Type errors, React hook misuse, accessibility lint (`jsx-a11y`) |
+| `vitest run` | Enquiry validation, honeypot, mailto encoding, POST success / failure / timeout |
+| `astro build` | Build errors |
+| `scripts/verify-dist.mjs` | Per-page title / description / canonical / Open Graph (unique, correct), 404 is `noindex`, JSON-LD validity, broken internal links, images without `alt`/size, remote placeholder images, Google Fonts, malformed SVGs, raw hex colours or hard-coded contact details in components |
+
+## Project structure
 
 ```
 ├── public/
-│   ├── favicon.svg & favicon.ico     # Brand favicon
-│   ├── logo.svg & logo.png           # Master brand lockup
-│   ├── og-image.png                  # 1200x630 OpenGraph social share card
-│   ├── robots.txt                    # Search crawler policy
-│   └── images/                       # Local branded SVG placeholders (TODO markers)
-│       ├── carer-and-participant-park.svg
-│       ├── independent-living-support.svg
-│       ├── personal-care-routine.svg
-│       ├── community-activity-centre.svg
-│       ├── skills-and-learning.svg
-│       ├── transport-and-outings.svg
-│       ├── team-aiwen-kuel.svg
-│       └── team-lual-chol.svg
+│   ├── favicon.ico, favicon-16/32.png, apple-touch-icon.png, icon-192/512.png   # generated from the logo
+│   ├── logo.png, og-image.png                                                  # generated from the logo
+│   ├── robots.txt
+│   └── images/                     # illustrated SVG placeholders, awaiting real photography
+├── scripts/
+│   ├── build-brand-assets.mjs      # regenerates every logo-derived asset (npm run brand-assets)
+│   └── verify-dist.mjs             # post-build spec checks (part of npm run check)
 ├── src/
+│   ├── assets/brand/               # logo-source.png (client file) + generated emblem / lockup
 │   ├── components/
-│   │   ├── ui/                       # Reusable token-based Astro primitives
-│   │   │   ├── Button.astro          # Primary, secondary, outline, lime (>=44px tap target)
-│   │   │   ├── Card.astro            # 12px radius, soft shadow, hairline borders
-│   │   │   ├── Section.astro         # Surface, tint, green, purple section wrappers
-│   │   │   ├── Container.astro       # Max-width layout container
-│   │   │   ├── Badge.astro           # Brand badges (ink on lime, tint, purple)
-│   │   │   ├── Input.astro           # Accessible input with inline errors
-│   │   │   ├── Select.astro          # Accessible select dropdown
-│   │   │   └── Textarea.astro        # Accessible multi-line textarea
-│   │   ├── layout/
-│   │   │   ├── Header.astro          # Sticky 3-zone top bar with tap-to-call button
-│   │   │   ├── Footer.astro          # NDIS Reg, ABN, Acknowledgement of Country
-│   │   │   └── SEO.astro             # Pre-rendered tags & LocalBusiness JSON-LD
-│   │   └── islands/                  # React interactive islands (@astrojs/react)
-│   │       ├── MobileMenu.tsx        # Keyboard-accessible slide-out menu
-│   │       ├── FaqAccordion.tsx      # Semantic details/summary with smooth toggle
-│   │       └── EnquiryForm.tsx       # Client-validated referral form + mailto fallback
-│   ├── content/                      # SINGLE SOURCE OF TRUTH (ALL COPY LIVES HERE)
-│   │   ├── site.ts                   # Master business facts, NDIS Reg, ABN, placeholders
-│   │   ├── services.ts               # 11 core NDIS services & plain-English copy
-│   │   ├── faqs.ts                   # NDIS FAQs & guidance
-│   │   └── values.ts                 # Core ethical values
-│   ├── layouts/
-│   │   └── BaseLayout.astro          # Root HTML layout, skip link, self-hosted fonts
-│   ├── lib/
-│   │   └── submitEnquiry.ts          # Validation logic, honeypot, POST stub, mailto
-│   ├── pages/                        # Pre-rendered multi-page routes
-│   │   ├── index.astro               # Home (Hero, Trust bar, Highlights, Values, 3-Step)
-│   │   ├── about.astro               # About (Story, Mission, Vision, Directors)
-│   │   ├── services.astro            # Services (11 Cards + deep-link enquiry)
-│   │   ├── who-we-support.astro      # Autism, ID, Ageing, Complex, Plan Types
-│   │   ├── ndis-info.astro           # Plain-English FAQ accordion (no-JS resilient)
-│   │   ├── contact.astro             # Referral Form, Phone, Email, Office Details
-│   │   ├── privacy.astro             # Australian Privacy Principles notice
-│   │   ├── feedback.astro            # Complaints procedure & NDIS Commission escalation
-│   │   └── 404.astro                 # Recovery page
-│   └── styles/
-│       └── global.css                # Tailwind v4 @theme brand tokens & focus styles
-├── astro.config.mjs                  # Astro 5 configuration + React + Sitemap
-├── vercel.json                       # Vercel static deployment settings
-├── CLAUDE.md                         # Engineering guidelines for Claude Code
-└── package.json
+│   │   ├── ui/                     # Button, Card, Section, Container, Badge, Input, Select, Textarea
+│   │   ├── layout/                 # Header (with no-JS nav), Footer, SEO (meta, canonical, JSON-LD)
+│   │   └── islands/                # MobileMenu, FaqAccordion, EnquiryForm (React)
+│   ├── content/                    # SINGLE SOURCE OF TRUTH for copy and business facts
+│   │   ├── site.ts                 # business details, NAV, FOOTER, TEAM, PLACEHOLDERS, BRAND_COLORS
+│   │   ├── pages.ts                # per-page SEO title and description
+│   │   ├── services.ts, faqs.ts, values.ts, forms.ts
+│   ├── layouts/BaseLayout.astro    # html shell, icons, font preloads, skip link
+│   ├── lib/submitEnquiry.ts        # validation, honeypot, POST with timeout, mailto fallback (+ tests)
+│   ├── pages/                      # index, about, services, who-we-support, ndis-info, contact,
+│   │                               # privacy, feedback, 404, site.webmanifest
+│   └── styles/global.css           # @theme tokens and layered base styles
+├── astro.config.mjs                # static output, clean URLs (build.format 'file'), sitemap
+└── vercel.json                     # security headers, asset caching, docs-only build skip
 ```
 
----
+## Content and placeholders
 
-## Master List of Placeholders to Replace
+All business facts live in `src/content/`. Components never hard-code them (the build fails if they do).
+`SITE.PLACEHOLDERS` in `src/content/site.ts` is the live list of what still needs client input:
 
-Every placeholder is centralized in `src/content/site.ts` for quick one-line updates:
+| Item | Current state |
+|---|---|
+| Phone | `0401 712 914`. The business plan lists `0413 955 269`; the client must confirm which is public |
+| Email | `info@empowerwell.com.au`. **Does not exist yet**: needs the domain and Zoho Mail |
+| Domain | `empowerwell.com.au` preferred; not registered |
+| Form endpoint | `PUBLIC_FORM_ENDPOINT` unset; the form falls back to a pre-filled email |
+| Address | Suburb only (Dharruk NSW 2770) until the client approves the street address |
+| Social links | `null` (hidden) until supplied |
+| Photography and director photos | Illustrated SVG placeholders in `public/images/` |
 
-| Placeholder Item | Current Value | How to Update |
-| :--- | :--- | :--- |
-| **Contact Phone** | `(02) 9831 0000` (Western Sydney local) / `0400 000 000` (DUMMY mobile) | Edit `SITE.phone` and `SITE.phoneHref` in `src/content/site.ts` |
-| **Email Address** | `info@empowerwell.com.au` | Edit `SITE.email` and `SITE.emailHref` in `src/content/site.ts` |
-| **Form Endpoint** | `PUBLIC_FORM_ENDPOINT` | Set `PUBLIC_FORM_ENDPOINT="https://formspree.io/f/..."` in `.env` |
-| **Social Links** | `"#"` | Update `SITE.socials` in `src/content/site.ts` |
-| **Director Photos** | `public/images/team-aiwen-kuel.svg` & `team-lual-chol.svg` | Drop official headshot photos into `public/images/` and update `TEAM` in `site.ts` |
-| **Photography** | SVG placeholders in `public/images/` | Replace with licensed photos of participants and carers in community settings |
-| **Director Story** | Draft narrative in `src/pages/about.astro` | Directors Aiwen & Lual can expand their personal journey in `about.astro` |
-| **NDIS Commission Hotline** | `1800 035 544` | Verified current hotline in `src/pages/feedback.astro` |
+To change the logo, replace `src/assets/brand/logo-source.png` and run `npm run brand-assets`.
 
----
-
-## Brand Tokens (Tailwind v4 `@theme`)
+## Brand tokens (Tailwind v4 `@theme`)
 
 Defined once in `src/styles/global.css`:
-- `green-900`: `#00613A` (primary text, buttons, header; 7.6:1 contrast on white)
-- `purple-700`: `#622072` (headings, links, focus ring; 10.2:1 contrast on surface)
-- `green-500`: `#3AB04A` (decorative only: icons, dividers; never body text)
-- `lime-400`: `#8BC53F` (decorative badges & highlights; text on it must always be ink)
-- `surface`: `#FAFAF7` (soft white canvas)
-- `surface-tint`: `#F2F7EF` (gentle green-tinted alternating sections)
-- `ink`: `#1F2A24` (high-contrast primary text)
-- `muted`: `#5B6660` (accessible secondary text, > 5.5:1 contrast)
-- Card radius: `12px` (`rounded-[12px]`)
-- Button radius: `9999px` (`rounded-full`)
 
----
+| Token | Value | Use |
+|---|---|---|
+| `green-900` | `#00613A` | Wordmark, primary buttons |
+| `purple-700` | `#622072` | Headings, links, focus ring |
+| `green-500` | `#3AB04A` | Decorative only (icons, dividers), never body text |
+| `lime-400` | `#8BC53F` | Badges and highlights; text on it is always `ink` |
+| `surface` / `surface-tint` | `#FAFAF7` / `#F2F7EF` | Page and alternating section backgrounds |
+| `ink` / `muted` | `#1F2A24` / `#5B6660` | Body and secondary text |
 
-## Accessibility Compliance (WCAG 2.2 AA)
+Cards use `rounded-[12px]`, buttons `rounded-full`, shadows `shadow-soft`.
 
-- **Contrast**: Guaranteed $\ge 4.5:1$ on all body text and $\ge 3:1$ on large headings.
-- **Focus Indicators**: High-visibility 3px purple focus rings (`focus-visible:outline-3 focus-visible:outline-purple-700`).
-- **Skip to Content**: First tabbable element in the DOM skipping straight to `#main-content`.
-- **Tap Targets**: All buttons, nav links, and interactive form controls are minimum 44px height/width.
-- **No-JS Resilience**: All pages pre-render as static HTML with `<title>` and `<meta>` tags. The FAQ accordion is built on native `<details>` and `<summary>` tags, working completely without JavaScript.
-- **Zoom**: Fully responsive and tested at 200% browser zoom without layout breakage.
-- **Motion**: Strictly honors `prefers-reduced-motion` with gentle transitions.
+## Accessibility (WCAG 2.2 AA)
+
+- Contrast at least 4.5:1 for text (3:1 for large headings), verified with axe-core on every page.
+- 3px focus rings on every control: purple on light backgrounds, lime on the dark footer.
+- Skip link, semantic landmarks, 44px minimum tap targets, `prefers-reduced-motion` respected.
+- Works without JavaScript: static HTML, a `<noscript>` navigation, a native `<details>` FAQ, and a form that posts by email instead of failing.
+- No horizontal scrolling from 320px (400% zoom) to 2560px.
+
+## Deployment
+
+Vercel, static output from `dist/`. `vercel.json` sets HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, immutable caching for `/_astro/*`, and skips builds for docs-only commits. Set `PUBLIC_FORM_ENDPOINT` in the Vercel project before launch.
+
+## Licence
+
+Proprietary. See [`LICENSE`](LICENSE). Copyright © 2026 Algorythmos Pty Ltd.

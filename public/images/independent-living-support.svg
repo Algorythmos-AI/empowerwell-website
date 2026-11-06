@@ -32,7 +32,5 @@
   <!-- Trust Note -->
   <text x="400" y="380" text-anchor="middle" font-family="'Atkinson Hyperlegible', sans-serif" font-weight="700" font-size="14" fill="#622072">Empowerwell Support · NDIS 4-LCYP0SK</text>
 
-  <!-- TODO Marker (Accessible developer notification) -->
-  <rect x="24" y="444" width="752" height="36" rx="8" fill="#FAFAF7" stroke="#8BC53F" stroke-width="1.5"/>
-  <text x="400" y="467" text-anchor="middle" font-family="'Atkinson Hyperlegible', sans-serif" font-size="11" fill="#5B6660" font-weight="700">TODO: Replace with licensed photo of participant in modern accessible home environment</text>
+  <!-- PLACEHOLDER: Replace with licensed photo of participant in modern accessible home environment (see SITE.PLACEHOLDERS in src/content/site.ts) -->
 </svg>

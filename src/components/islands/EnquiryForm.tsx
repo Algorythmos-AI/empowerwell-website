@@ -1,11 +1,13 @@
-import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
+import { useState, useEffect, useRef, type ChangeEvent, type SyntheticEvent } from "react";
 import { CheckCircle2, Send, AlertCircle, Mail, ArrowRight } from "lucide-react";
 import {
   type EnquiryFormData,
+  type SubmissionResult,
   type ValidationErrors,
   validateEnquiryForm,
   submitEnquiry,
 } from "../../lib/submitEnquiry";
+import { FORM_EXAMPLES } from "../../content/forms";
 
 interface ServiceOption {
   slug: string;
@@ -15,9 +17,15 @@ interface ServiceOption {
 interface EnquiryFormProps {
   services: ServiceOption[];
   defaultServiceSlug?: string;
+  /** Inbox for the mailto fallback and the no-JS form action (SITE.email). */
+  recipient: string;
+  /** POST endpoint (SITE.formEndpoint); empty means mailto fallback only. */
+  endpoint: string;
+  phone: string;
+  phoneHref: string;
 }
 
-export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFormProps) {
+export default function EnquiryForm({ services, defaultServiceSlug, recipient, endpoint, phone, phoneHref }: EnquiryFormProps) {
   const [formData, setFormData] = useState<EnquiryFormData>({
     fullName: "",
     phone: "",
@@ -34,8 +42,16 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
 
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionSuccess, setSubmissionSuccess] = useState<string | null>(null);
-  const [mailtoFallbackUrl, setMailtoFallbackUrl] = useState<string | null>(null);
+  const [result, setResult] = useState<SubmissionResult | null>(null);
+  const resultHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move focus (and the viewport) to the outcome so keyboard, screen-reader and mobile users see it.
+  useEffect(() => {
+    if (!result) return;
+    const heading = resultHeadingRef.current;
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [result]);
 
   // Check URL query parameters on mount to pre-select service
   useEffect(() => {
@@ -47,6 +63,9 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
           (s) => s.slug.toLowerCase() === serviceParam.toLowerCase() || s.title.toLowerCase() === serviceParam.toLowerCase()
         );
         if (matched) {
+          // The ?service= query is only readable after hydration (static HTML has no URL params),
+          // so syncing it into state from an effect is intended here.
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setFormData((prev) => ({ ...prev, serviceOfInterest: matched.title }));
         }
       }
@@ -73,7 +92,7 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
     }
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrors({});
@@ -93,16 +112,13 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
     }
 
     try {
-      const result = await submitEnquiry(formData);
-      if (result.success) {
-        setSubmissionSuccess(result.message || "Thank you! Your enquiry has been received.");
-        if (result.mailtoUrl) {
-          setMailtoFallbackUrl(result.mailtoUrl);
-        }
-      } else if (result.errors) {
-        setErrors(result.errors);
+      const outcome = await submitEnquiry(formData, { recipient, endpoint });
+      if (outcome.success) {
+        setResult(outcome);
+      } else if (outcome.errors) {
+        setErrors(outcome.errors);
       }
-    } catch (err) {
+    } catch {
       setErrors({
         general: "An unexpected error occurred while preparing your submission. Please call us directly.",
       });
@@ -111,77 +127,101 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
     }
   };
 
-  if (submissionSuccess) {
+  const resetForm = () => {
+    setResult(null);
+    setFormData({
+      fullName: "",
+      phone: "",
+      email: "",
+      role: "",
+      planType: "",
+      serviceOfInterest: "",
+      ndisNumber: "",
+      preferredContact: "phone",
+      message: "",
+      consent: false,
+      honeypot: "",
+    });
+  };
+
+  if (result) {
+    const sent = result.delivery !== "mailto";
     return (
       <div
         role="status"
         aria-live="polite"
-        className="rounded-[12px] bg-white border-2 border-green-500 p-8 sm:p-10 text-center shadow-soft"
+        className={`rounded-[12px] bg-white border-2 p-8 sm:p-10 text-center shadow-soft ${sent ? "border-green-500" : "border-purple-700"}`}
       >
-        <div className="w-16 h-16 rounded-full bg-green-100 text-green-900 mx-auto flex items-center justify-center mb-6">
-          <CheckCircle2 className="w-10 h-10 text-green-600" aria-hidden="true" />
+        <div className="w-16 h-16 rounded-full bg-green-100 mx-auto flex items-center justify-center mb-6">
+          {sent ? (
+            <CheckCircle2 className="w-10 h-10 text-green-700" aria-hidden="true" />
+          ) : (
+            <Mail className="w-9 h-9 text-purple-700" aria-hidden="true" />
+          )}
         </div>
 
-        <h3 className="text-2xl sm:text-3xl font-heading font-extrabold text-green-900 mb-3">
-          Referral Prepared Successfully
+        <h3
+          ref={resultHeadingRef}
+          tabIndex={-1}
+          className="text-2xl sm:text-3xl font-heading font-extrabold text-green-900 mb-3 focus:outline-none"
+        >
+          {sent ? "Enquiry received" : "One more step: send your email"}
         </h3>
 
-        <p className="text-lg text-ink mb-6 max-w-xl mx-auto leading-relaxed">
-          {submissionSuccess}
-        </p>
+        <p className="text-lg text-ink mb-6 max-w-xl mx-auto leading-relaxed">{result.message}</p>
 
-        <div className="bg-surface-tint p-5 rounded-[12px] border border-green-200 text-left max-w-lg mx-auto mb-8 space-y-2 text-sm sm:text-base">
-          <p className="font-bold text-green-900">Next Steps with Empowerwell Support:</p>
-          <ul className="list-disc list-inside text-ink space-y-1">
-            <li>Our intake team will review your enquiry within 24 business hours.</li>
-            <li>We will contact you via {formData.preferredContact === "either" ? "phone or email" : formData.preferredContact} to schedule your free meet & greet.</li>
-            <li>No obligation or commitment required.</li>
-          </ul>
-        </div>
-
-        {mailtoFallbackUrl && (
-          <div className="mb-6">
+        {!sent && result.mailtoUrl && (
+          <div className="mb-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href={mailtoFallbackUrl}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-700 text-white font-bold hover:bg-purple-800 transition-colors focus-visible:outline-3 focus-visible:outline-green-900"
+              href={result.mailtoUrl}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-purple-700 text-white font-bold hover:bg-purple-800 transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
             >
               <Mail className="w-5 h-5" aria-hidden="true" />
-              <span>Open Email Summary in Your Mail Client</span>
+              <span>Open pre-filled email</span>
             </a>
+            <a
+              href={phoneHref}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full border-2 border-purple-700 text-purple-700 font-bold hover:bg-purple-50 transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
+            >
+              <span>Call {phone}</span>
+            </a>
+          </div>
+        )}
+
+        {sent && (
+          <div className="bg-surface-tint p-5 rounded-[12px] border border-green-200 text-left max-w-lg mx-auto mb-8 space-y-2 text-sm sm:text-base">
+            <p className="font-bold text-green-900">What happens next</p>
+            <ul className="list-disc list-inside text-ink space-y-1">
+              <li>Our intake team will review your enquiry.</li>
+              <li>
+                We will contact you by {formData.preferredContact === "either" ? "phone or email" : formData.preferredContact} to arrange a free meet and greet.
+              </li>
+              <li>There is no obligation or commitment.</li>
+            </ul>
           </div>
         )}
 
         <button
           type="button"
-          onClick={() => {
-            setSubmissionSuccess(null);
-            setFormData({
-              fullName: "",
-              phone: "",
-              email: "",
-              role: "",
-              planType: "",
-              serviceOfInterest: "",
-              ndisNumber: "",
-              preferredContact: "phone",
-              message: "",
-              consent: false,
-              honeypot: "",
-            });
-          }}
-          className="text-purple-700 font-bold hover:underline inline-flex items-center gap-1.5 focus-visible:outline-3 focus-visible:outline-purple-700 rounded-md p-1"
+          onClick={resetForm}
+          className="text-purple-700 font-bold hover:underline inline-flex items-center gap-1.5 min-h-[44px] focus-visible:outline-3 focus-visible:outline-purple-700 rounded-md px-2"
         >
-          <span>Submit another referral</span>
+          <span>{sent ? "Submit another enquiry" : "Edit or start again"}</span>
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </button>
       </div>
     );
   }
 
+  // Without JavaScript the browser posts the form directly (never as a GET, which would put
+  // personal details in the URL): to the endpoint when configured, otherwise as an email.
   return (
     <form
       onSubmit={handleSubmit}
       noValidate
+      method="post"
+      action={endpoint || `mailto:${recipient}`}
+      encType={endpoint ? undefined : "text/plain"}
       className="rounded-[12px] bg-white border border-border-card p-6 sm:p-10 shadow-soft"
       aria-label="Make an NDIS Referral or Enquiry"
     >
@@ -248,7 +288,7 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
               required
               value={formData.phone}
               onChange={handleChange}
-              placeholder="e.g. 0400 000 000 or (02) 9831 0000"
+              placeholder={`e.g. ${FORM_EXAMPLES.mobile}`}
               aria-invalid={errors.phone ? "true" : "false"}
               aria-describedby={errors.phone ? "phone-error" : "phone-help"}
               className={`w-full min-h-[44px] px-4 py-2.5 rounded-[12px] bg-surface text-ink text-base border transition-colors
@@ -280,7 +320,7 @@ export default function EnquiryForm({ services, defaultServiceSlug }: EnquiryFor
               required
               value={formData.email}
               onChange={handleChange}
-              placeholder="name@example.com"
+              placeholder={FORM_EXAMPLES.email}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               className={`w-full min-h-[44px] px-4 py-2.5 rounded-[12px] bg-surface text-ink text-base border transition-colors

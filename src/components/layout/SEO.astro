@@ -1,99 +1,95 @@
 ---
 import { SITE } from "../../content/site";
+import { PAGES, type PageMeta } from "../../content/pages";
 
 interface Props {
-  title?: string;
-  description?: string;
-  canonicalUrl?: string;
+  meta?: PageMeta;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: "website" | "article";
+  /** Excludes the page from search indexes and omits its canonical (404 and other utility pages). */
+  noindex?: boolean;
 }
 
 const {
-  title = `${SITE.brandName} · ${SITE.tagline}`,
-  description = "Empowerwell Support Pty Ltd is a registered NDIS provider in Western Sydney offering person-centred disability support, SIL, personal care, and community participation.",
-  canonicalUrl = Astro.url.href,
+  meta = PAGES.home,
   ogImage = `${SITE.websiteUrl}/og-image.png`,
+  ogImageAlt = `${SITE.brandName} logo: a tree with two figures and the tagline "${SITE.tagline}"`,
   ogType = "website",
+  noindex = false,
 } = Astro.props;
 
-// LocalBusiness & NDIS Provider Structured Data (JSON-LD)
+// Canonical URL: production origin + clean path (no trailing slash, no .html, no /index).
+const cleanPath =
+  Astro.url.pathname
+    .replace(/\.html$/, "")
+    .replace(/\/index$/, "/")
+    .replace(/(.)\/$/, "$1") || "/";
+const canonicalUrl = new URL(cleanPath, SITE.websiteUrl).href;
+
+const sameAs = Object.values(SITE.socials).filter((url): url is string => Boolean(url));
+
+// LocalBusiness structured data. Street address omitted until the client approves publishing it.
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": SITE.legalName,
-  "alternateName": SITE.brandName,
-  "description": description,
-  "url": SITE.websiteUrl,
-  "telephone": SITE.phone,
-  "email": SITE.email,
-  "image": ogImage,
-  "priceRange": "NDIS Price Guide Compliant",
-  "address": {
+  "@id": `${SITE.websiteUrl}/#organization`,
+  name: SITE.legalName,
+  alternateName: SITE.brandName,
+  description: PAGES.home.description,
+  slogan: SITE.tagline,
+  url: SITE.websiteUrl,
+  logo: `${SITE.websiteUrl}/logo.png`,
+  image: `${SITE.websiteUrl}/og-image.png`,
+  telephone: SITE.phoneE164,
+  email: SITE.email,
+  taxID: SITE.abn,
+  address: {
     "@type": "PostalAddress",
-    "addressLocality": SITE.suburb,
-    "addressRegion": SITE.state,
-    "postalCode": SITE.postcode,
-    "addressCountry": "AU",
+    addressLocality: SITE.suburb,
+    addressRegion: SITE.state,
+    postalCode: SITE.postcode,
+    addressCountry: "AU",
   },
-  "areaServed": [
-    {
-      "@type": "AdministrativeArea",
-      "name": "Greater Sydney",
-    },
-    {
-      "@type": "AdministrativeArea",
-      "name": "Western Sydney",
-    },
-    {
-      "@type": "AdministrativeArea",
-      "name": "Regional New South Wales",
-    },
+  areaServed: [
+    { "@type": "AdministrativeArea", name: "Western Sydney" },
+    { "@type": "AdministrativeArea", name: "Greater Sydney" },
+    { "@type": "AdministrativeArea", name: "Regional New South Wales" },
   ],
-  "openingHoursSpecification": [
+  openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "opens": "00:00",
-      "closes": "23:59",
-      "description": "24/7 on-call disability and SIL supports",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "18:00",
     },
   ],
-  "founder": SITE.directors.map((name) => ({
-    "@type": "Person",
-    "name": name,
-  })),
+  founder: SITE.directors.map((name) => ({ "@type": "Person", name })),
+  ...(sameAs.length > 0 ? { sameAs } : {}),
 };
 ---
 
-<!-- Primary Meta Tags -->
-<title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
-<link rel="canonical" href={canonicalUrl} />
-<meta name="robots" content="index, follow" />
+<title>{meta.title}</title>
+<meta name="description" content={meta.description} />
+{noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonicalUrl} />}
 
-<!-- Open Graph / Facebook / LinkedIn -->
+<!-- Open Graph -->
 <meta property="og:type" content={ogType} />
 <meta property="og:url" content={canonicalUrl} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={meta.title} />
+<meta property="og:description" content={meta.description} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:site_name" content={SITE.legalName} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogImageAlt} />
+<meta property="og:site_name" content={SITE.brandName} />
 <meta property="og:locale" content="en_AU" />
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={canonicalUrl} />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
+<meta name="twitter:title" content={meta.title} />
+<meta name="twitter:description" content={meta.description} />
 <meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
 
-<!-- Structured Data (JSON-LD) -->
-<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+{!noindex && <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />}

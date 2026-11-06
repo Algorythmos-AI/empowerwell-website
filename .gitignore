@@ -11,3 +11,7 @@ coverage/
 .aistudio/
 bun.lock
 
+
+# Local tooling
+.claude/
+.vercel/

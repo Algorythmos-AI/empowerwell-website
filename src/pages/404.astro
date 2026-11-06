@@ -1,15 +1,12 @@
 ---
+import { PAGES } from "../content/pages";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Section from "../components/ui/Section.astro";
 import Button from "../components/ui/Button.astro";
-import { SITE } from "../content/site";
 ---
 
-<BaseLayout
-  title={`Page Not Found (404) · ${SITE.brandName}`}
-  description="The page you were looking for could not be found. Return to Empowerwell Support's homepage."
->
+<BaseLayout meta={PAGES.notFound} noindex>
   <Section variant="surface" class="py-20 sm:py-28 text-center">
     <Container>
       <div class="max-w-2xl mx-auto space-y-6">

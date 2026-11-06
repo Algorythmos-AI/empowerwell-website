@@ -1,4 +1,5 @@
 ---
+import { PAGES } from "../content/pages";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Section from "../components/ui/Section.astro";
@@ -8,10 +9,7 @@ import Button from "../components/ui/Button.astro";
 import { SITE } from "../content/site";
 ---
 
-<BaseLayout
-  title={`Feedback & Complaints · ${SITE.brandName} · NDIS Quality & Safeguards`}
-  description="How to provide feedback, raise a concern, or make a formal complaint to Empowerwell Support and the NDIS Quality and Safeguards Commission."
->
+<BaseLayout meta={PAGES.feedback}>
   <Section variant="surface" class="pt-8 sm:pt-12 pb-16">
     <Container>
       <div class="max-w-4xl mx-auto space-y-8">
@@ -91,17 +89,17 @@ import { SITE } from "../content/site";
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-sm">
             <div class="p-4 rounded-[12px] bg-white border border-green-200">
               <p class="font-bold text-muted uppercase text-xs">Commission Phone</p>
-              <p class="text-lg font-bold text-purple-700 mt-1">1800 035 544</p>
+              <a href={SITE.ndisCommissionPhoneHref} class="inline-flex items-center min-h-[44px] text-lg font-bold text-purple-700 underline underline-offset-4 rounded-sm focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2">{SITE.ndisCommissionPhone}</a>
               <p class="text-xs text-muted">Free call from landlines</p>
             </div>
 
             <div class="p-4 rounded-[12px] bg-white border border-green-200">
               <p class="font-bold text-muted uppercase text-xs">Website & Complaint Form</p>
               <a
-                href="https://www.ndiscommission.gov.au"
+                href={SITE.ndisCommissionUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-base font-bold text-purple-700 underline mt-1 block"
+                class="inline-flex items-center min-h-[44px] text-base font-bold text-purple-700 underline underline-offset-4 rounded-sm focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
               >
                 ndiscommission.gov.au
               </a>

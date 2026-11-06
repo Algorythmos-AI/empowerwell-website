@@ -6,6 +6,8 @@
  * and a guaranteed fallback generating a prefilled mailto link.
  */
 
+import { FORM_EXAMPLES } from "../content/forms";
+
 export interface EnquiryFormData {
   fullName: string;
   phone: string;
@@ -32,19 +34,36 @@ export interface ValidationErrors {
   general?: string;
 }
 
+/**
+ * delivery:
+ *  - "sent":   the configured endpoint accepted the enquiry (HTTP 2xx).
+ *  - "mailto": nothing was sent; the user must send the pre-filled email themselves.
+ *  - "ignored": honeypot tripped; bots get a neutral response and nothing is sent.
+ */
 export interface SubmissionResult {
   success: boolean;
+  delivery?: "sent" | "mailto" | "ignored";
   errors?: ValidationErrors;
   message?: string;
   mailtoUrl?: string;
 }
 
+export interface SubmitOptions {
+  /** Inbox that receives the mailto fallback (SITE.email). */
+  recipient: string;
+  /** POST endpoint (SITE.formEndpoint). Empty string disables the POST. */
+  endpoint: string;
+  /** Abort the POST after this many milliseconds. */
+  timeoutMs?: number;
+  fetchImpl?: typeof fetch;
+}
+
 /**
  * Validate Australian phone number format
- * Accepts local numbers: (02) 9831 0000, 0298310000, 0400000000, 0400 000 000, +61 400 000 000
+ * Accepts mobiles (04xx xxx xxx), landlines ((02) xxxx xxxx), +61 formats and 1300/1800 numbers.
  */
 export function isValidAustralianPhone(phone: string): boolean {
-  const cleaned = phone.replace(/[\s\-\(\)\.]/g, "");
+  const cleaned = phone.replace(/[\s\-().]/g, "");
   // Australian mobile (04...) or landline (02, 03, 07, 08) or 1300/1800 or international +61
   const ausPhoneRegex = /^(?:\+?61|0)[2-478](?:[0-9]{8})$|^(?:1300|1800)[0-9]{6}$/;
   return ausPhoneRegex.test(cleaned);
@@ -73,13 +92,13 @@ export function validateEnquiryForm(data: EnquiryFormData): ValidationErrors {
   if (!data.phone.trim()) {
     errors.phone = "Please enter your contact phone number.";
   } else if (!isValidAustralianPhone(data.phone)) {
-    errors.phone = "Please enter a valid Australian phone number (e.g., 0400 000 000 or (02) 9831 0000).";
+    errors.phone = `Please enter a valid Australian phone number (e.g. ${FORM_EXAMPLES.mobile} or ${FORM_EXAMPLES.landline}).`;
   }
 
   if (!data.email.trim()) {
     errors.email = "Please enter your email address.";
   } else if (!isValidEmail(data.email)) {
-    errors.email = "Please enter a valid email address (e.g., name@example.com).";
+    errors.email = `Please enter a valid email address (e.g. ${FORM_EXAMPLES.email}).`;
   }
 
   if (!data.role) {
@@ -108,15 +127,14 @@ export function validateEnquiryForm(data: EnquiryFormData): ValidationErrors {
 }
 
 /**
- * Generates a prefilled mailto URL with enquiry parameters
+ * Builds a pre-filled mailto URL for the enquiry (used when no endpoint is configured or it fails).
  */
-export function generateEnquiryMailto(data: EnquiryFormData): string {
-  const recipient = "info@empowerwell.com.au";
+export function generateEnquiryMailto(data: EnquiryFormData, recipient: string): string {
   const subject = encodeURIComponent(`New NDIS Referral: ${data.fullName} (${data.serviceOfInterest || "General Enquiry"})`);
-  
+
   const bodyText = [
-    `NEW NDIS ENQUIRY / REFERRAL`,
-    `----------------------------------------------------`,
+    "NEW NDIS ENQUIRY / REFERRAL",
+    "----------------------------------------------------",
     `Full Name: ${data.fullName}`,
     `Phone: ${data.phone}`,
     `Email: ${data.email}`,
@@ -125,71 +143,72 @@ export function generateEnquiryMailto(data: EnquiryFormData): string {
     `Service of Interest: ${data.serviceOfInterest}`,
     `NDIS Number: ${data.ndisNumber || "Not provided / Exploring"}`,
     `Preferred Contact: ${data.preferredContact}`,
-    ``,
-    `Message / Needs:`,
-    `${data.message}`,
-    ``,
-    `----------------------------------------------------`,
-    `Consent: User agreed to privacy terms and contact authorisation.`,
-    `Submitted from empowerwell.com.au`,
+    "",
+    "Message / Needs:",
+    data.message,
+    "",
+    "----------------------------------------------------",
+    "Consent: the sender agreed to the privacy notice and to be contacted about this enquiry.",
   ].join("\n");
 
   return `mailto:${recipient}?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
 }
 
 /**
- * Submit Enquiry Handler
- * Validates, checks honeypot, attempts POST if endpoint provided, and returns fallback mailto
+ * Validates, checks the honeypot, POSTs to the endpoint when configured, and otherwise (or on any
+ * failure) returns a mailto fallback. Never reports "sent" unless the endpoint returned 2xx.
  */
-export async function submitEnquiry(data: EnquiryFormData): Promise<SubmissionResult> {
-  // 1. Check honeypot (silent bot trap)
+export async function submitEnquiry(data: EnquiryFormData, options: SubmitOptions): Promise<SubmissionResult> {
+  const { recipient, endpoint, timeoutMs = 10_000, fetchImpl = fetch } = options;
+
   if (data.honeypot && data.honeypot.trim() !== "") {
-    // Return fake success to bots without processing
-    return { success: true, message: "Thank you for your referral." };
+    return { success: true, delivery: "ignored", message: "Thank you for your enquiry." };
   }
 
-  // 2. Validate fields
   const errors = validateEnquiryForm(data);
   if (Object.keys(errors).length > 0) {
     return { success: false, errors };
   }
 
-  const mailtoUrl = generateEnquiryMailto(data);
-  const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || "";
-
-  // 3. Optional POST to configured backend (Formspree, Resend, or Webhook)
-  // TODO: Configure Formspree or Resend API key in .env when live backend is ready
-  if (endpoint && endpoint.trim() !== "") {
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          submittedAt: new Date().toISOString(),
-          source: "Empowerwell Support Website",
-        }),
-      });
-
-      if (response.ok) {
-        return {
-          success: true,
-          message: "Thank you! Your referral has been received. Our team will contact you within 24 business hours.",
-          mailtoUrl,
-        };
-      }
-    } catch (err) {
-      console.warn("Backend endpoint submission error, falling back to mailto", err);
-    }
-  }
-
-  // 4. Default clean success with mailto draft fallback
-  return {
+  const mailtoUrl = generateEnquiryMailto(data, recipient);
+  const mailtoResult: SubmissionResult = {
     success: true,
-    message: "Thank you! Your enquiry has been prepared. A confirmation draft will open in your email client, and our team will be in touch within 24 business hours.",
+    delivery: "mailto",
     mailtoUrl,
+    message: `Your enquiry is ready but has not been sent yet. Open the pre-filled email and press send, or email ${recipient} directly.`,
   };
+
+  if (!endpoint.trim()) return mailtoResult;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { honeypot, ...payload } = data;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetchImpl(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString(), source: "Empowerwell Support website" }),
+      signal: controller.signal,
+    });
+    if (response.ok) {
+      return {
+        success: true,
+        delivery: "sent",
+        mailtoUrl,
+        message: "Thank you. Your enquiry has been received and our team will contact you soon.",
+      };
+    }
+    return {
+      ...mailtoResult,
+      message: `We could not send your enquiry online (error ${response.status}). Please open the pre-filled email and press send, or call us.`,
+    };
+  } catch {
+    return {
+      ...mailtoResult,
+      message: "We could not reach our enquiry service. Please open the pre-filled email and press send, or call us.",
+    };
+  } finally {
+    clearTimeout(timer);
+  }
 }

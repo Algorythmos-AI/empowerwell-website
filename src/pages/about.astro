@@ -1,4 +1,5 @@
 ---
+import { PAGES } from "../content/pages";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Section from "../components/ui/Section.astro";
@@ -9,10 +10,7 @@ import { SITE, TEAM } from "../content/site";
 import { VALUES } from "../content/values";
 ---
 
-<BaseLayout
-  title={`About Us · ${SITE.brandName} · NDIS Provider in Western Sydney`}
-  description="Learn about Empowerwell Support Pty Ltd, our mission, vision, values, and our directors Aiwen Kuel and Lual Chol."
->
+<BaseLayout meta={PAGES.about}>
   {/* Header Hero */}
   <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
     <Container>

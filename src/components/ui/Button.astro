@@ -24,7 +24,7 @@ const {
 } = Astro.props;
 
 const baseStyles =
-  "inline-flex items-center justify-center font-bold tracking-tight rounded-full transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none no-underline text-center shrink-0 min-h-[44px]";
+  "inline-flex items-center justify-center font-bold tracking-tight rounded-full transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none no-underline text-center text-balance max-w-full min-h-[44px] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-purple-700";
 
 const sizeStyles = {
   sm: "px-4 py-2 text-sm min-w-[44px]",
@@ -34,15 +34,15 @@ const sizeStyles = {
 
 const variantStyles = {
   primary:
-    "bg-green-900 text-white hover:bg-green-800 active:bg-green-950 shadow-soft focus-visible:outline-purple-700",
+    "bg-green-900 text-white hover:bg-green-800 active:bg-green-950 shadow-soft",
   secondary:
-    "bg-purple-700 text-white hover:bg-purple-800 active:bg-purple-900 shadow-soft focus-visible:outline-green-900",
+    "bg-purple-700 text-white hover:bg-purple-800 active:bg-purple-900 shadow-soft",
   outline:
-    "border-2 border-purple-700 text-purple-700 bg-transparent hover:bg-purple-50 active:bg-purple-100 focus-visible:outline-green-900",
+    "border-2 border-purple-700 text-purple-700 bg-transparent hover:bg-purple-50 active:bg-purple-100",
   ghost:
-    "text-purple-700 hover:bg-purple-50 active:bg-purple-100 focus-visible:outline-purple-700",
+    "text-purple-700 hover:bg-purple-50 active:bg-purple-100",
   lime:
-    "bg-lime-400 text-ink hover:bg-lime-500 font-bold shadow-soft focus-visible:outline-purple-700",
+    "bg-lime-400 text-ink hover:brightness-95 font-bold shadow-soft",
 };
 
 const combinedClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;
