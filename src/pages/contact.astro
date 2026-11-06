@@ -1,4 +1,5 @@
 ---
+import { PAGES } from "../content/pages";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Section from "../components/ui/Section.astro";
@@ -14,10 +15,7 @@ const serviceOptions = SERVICES.map((s) => ({
 }));
 ---
 
-<BaseLayout
-  title={`Contact Us & Make a Referral · ${SITE.brandName} · Western Sydney`}
-  description="Contact Empowerwell Support Pty Ltd or submit an NDIS participant referral online. Fast 24-hour response for Western Sydney and regional NSW."
->
+<BaseLayout meta={PAGES.contact}>
   {/* Hero Header */}
   <Section variant="surface" class="pt-8 sm:pt-12 pb-10">
     <Container>
@@ -39,7 +37,21 @@ const serviceOptions = SERVICES.map((s) => ({
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Left Column: Interactive Form Island */}
         <div class="lg:col-span-8">
-          <EnquiryForm client:load services={serviceOptions} />
+          <EnquiryForm
+            client:load
+            services={serviceOptions}
+            recipient={SITE.email}
+            endpoint={SITE.formEndpoint}
+            phone={SITE.phone}
+            phoneHref={SITE.phoneHref}
+          />
+          <noscript>
+            <p class="mt-4 p-4 rounded-[12px] bg-surface-tint border border-green-200 text-sm text-ink">
+              JavaScript is turned off, so this form will open your email app to send your enquiry. You can also call us on
+              <a href={SITE.phoneHref} class="font-bold text-purple-700 underline">{SITE.phone}</a> or email
+              <a href={SITE.emailHref} class="font-bold text-purple-700 underline">{SITE.email}</a>.
+            </p>
+          </noscript>
         </div>
 
         {/* Right Column: Direct Contact Info & Office Details */}

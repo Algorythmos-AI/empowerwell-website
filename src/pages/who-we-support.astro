@@ -1,4 +1,5 @@
 ---
+import { PAGES } from "../content/pages";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Section from "../components/ui/Section.astro";
@@ -51,10 +52,7 @@ const participantGroups = [
 ];
 ---
 
-<BaseLayout
-  title={`Who We Support · ${SITE.brandName} · NDIS Provider Western Sydney`}
-  description="Discover how Empowerwell Support provides person-centred care for people with autism, intellectual disability, ageing participants, and complex care needs."
->
+<BaseLayout meta={PAGES.whoWeSupport}>
   {/* Hero */}
   <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
     <Container>
@@ -132,7 +130,7 @@ const participantGroups = [
             We Welcome Self, Plan, and NDIA-Managed Participants
           </h2>
           <p class="text-lg text-ink">
-            Because Empowerwell Support is a Registered NDIS Provider (Registration 4-LCYP0SK), you have complete freedom to engage our services no matter how your NDIS funding is administered.
+            Because Empowerwell Support is a Registered NDIS Provider (Registration {SITE.ndisRegistration}), you have complete freedom to engage our services no matter how your NDIS funding is administered.
           </p>
         </div>
 

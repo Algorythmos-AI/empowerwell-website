@@ -1,4 +1,5 @@
 ---
+import { PAGES } from "../content/pages";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Section from "../components/ui/Section.astro";
@@ -9,10 +10,7 @@ import { SITE } from "../content/site";
 import { FAQS } from "../content/faqs";
 ---
 
-<BaseLayout
-  title={`NDIS Guide & FAQs · ${SITE.brandName} · Plain English Advice`}
-  description="Clear, plain-English guidance on understanding the NDIS, navigating plan management types, choosing the right provider, and our intake process."
->
+<BaseLayout meta={PAGES.ndisInfo}>
   {/* Hero */}
   <Section variant="surface" class="pt-8 sm:pt-12 pb-12">
     <Container>
