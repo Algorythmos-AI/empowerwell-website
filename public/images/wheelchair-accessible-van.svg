@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-labelledby="t">
+  <title id="t">Illustration of a wheelchair-accessible van with its rear ramp lowered</title>
+  <!-- PLACEHOLDER: replace with a photo of Empowerwell Support's own wheelchair-accessible van (see SITE.PLACEHOLDERS in src/content/site.ts) -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2F7EF"/>
+      <stop offset="1" stop-color="#FAFAF7"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <circle cx="660" cy="110" r="46" fill="#8BC53F" opacity="0.35"/>
+  <rect x="0" y="392" width="800" height="108" fill="#E1E8E3"/>
+  <rect x="0" y="392" width="800" height="6" fill="#ABDCBE"/>
+
+  <!-- Van body -->
+  <path d="M120 180 Q120 150 150 150 L470 150 Q500 150 520 172 L600 250 Q616 266 616 290 L616 360 Q616 374 602 374 L134 374 Q120 374 120 360 Z" fill="#FFFFFF" stroke="#00613A" stroke-width="6"/>
+  <!-- Stripe -->
+  <path d="M120 300 L616 300 L616 322 L120 322 Z" fill="#00613A"/>
+  <path d="M120 322 L616 322 L616 330 L120 330 Z" fill="#8BC53F"/>
+  <!-- Windows -->
+  <rect x="150" y="178" width="96" height="70" rx="10" fill="#D5EDE0" stroke="#00613A" stroke-width="4"/>
+  <rect x="262" y="178" width="96" height="70" rx="10" fill="#D5EDE0" stroke="#00613A" stroke-width="4"/>
+  <rect x="374" y="178" width="88" height="70" rx="10" fill="#D5EDE0" stroke="#00613A" stroke-width="4"/>
+  <path d="M480 178 L500 178 Q512 178 520 186 L572 246 L480 246 Z" fill="#D5EDE0" stroke="#00613A" stroke-width="4"/>
+  <!-- Door line and handle -->
+  <path d="M470 160 L470 368" stroke="#00613A" stroke-width="3" opacity="0.5"/>
+  <rect x="448" y="268" width="16" height="6" rx="3" fill="#00613A"/>
+  <!-- Headlight -->
+  <rect x="598" y="282" width="16" height="12" rx="4" fill="#8BC53F"/>
+
+  <!-- Accessibility symbol panel -->
+  <rect x="270" y="252" width="44" height="44" rx="8" fill="#622072"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="291" cy="262" r="3.5" fill="#FFFFFF" stroke="none"/>
+    <path d="M289 268 L289 280 L300 280 L304 289"/>
+    <path d="M285 274 A10 10 0 1 0 299 287"/>
+  </g>
+
+  <!-- Rear ramp lowered -->
+  <path d="M120 350 L44 392 L60 392 L120 362 Z" fill="#B479C2" stroke="#622072" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M112 352 L112 196" stroke="#622072" stroke-width="5"/>
+
+  <!-- Wheels -->
+  <circle cx="210" cy="378" r="38" fill="#1F2A24"/>
+  <circle cx="210" cy="378" r="16" fill="#E1E8E3"/>
+  <circle cx="530" cy="378" r="38" fill="#1F2A24"/>
+  <circle cx="530" cy="378" r="16" fill="#E1E8E3"/>
+
+  <text x="400" y="462" text-anchor="middle" font-family="'Nunito', sans-serif" font-weight="800" font-size="24" fill="#00613A">Wheelchair-accessible transport</text>
+</svg>

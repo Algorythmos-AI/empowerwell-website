@@ -30,7 +30,7 @@ export const SITE = {
   abn: "88 681 094 342",
   directors: ["Aiwen Kuel", "Lual Chol"],
 
-  // Contact & location (street address intentionally not published until the client confirms it)
+  // Contact & location. Street address approved for publication by the client (email, 8 Nov 2026).
   phone: phoneDisplay,
   phoneHref: `tel:+61${phoneDisplay.replace(/\s/g, "").replace(/^0/, "")}`,
   phoneE164: `+61${phoneDisplay.replace(/\s/g, "").replace(/^0/, "")}`,
@@ -39,6 +39,7 @@ export const SITE = {
   emailHref: `mailto:${email}`,
   // Public origin from astro.config (site-url.mjs): the Vercel production domain, or the custom domain once attached.
   websiteUrl: ((import.meta.env.SITE as string | undefined) ?? "https://empowerwell.com.au").replace(/\/$/, ""),
+  streetAddress: "62 Eloura St",
   suburb: "Dharruk",
   state: "NSW",
   postcode: "2770",
@@ -91,12 +92,12 @@ export const SITE = {
     phone: "0401 712 914 is from our client records; the business plan lists 0413 955 269. Confirm which is public.",
     email: "info@empowerwell.com.au does not exist until the domain is registered and Zoho Mail is set up.",
     domain: "https://empowerwell.com.au is the preferred domain; not registered yet.",
-    address: "Only the suburb (Dharruk NSW 2770) is shown until the client approves publishing the street address.",
-    socialUrls: "null until the client supplies verified Facebook / Instagram / Google Business profiles.",
+    socialUrls: "No Facebook; Instagram exists but the client wants a professional one set up first. null until then.",
     formEndpoint: "Set PUBLIC_FORM_ENDPOINT (Formspree / Web3Forms) in Vercel; until then the form opens a pre-filled email.",
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",
     directorBios: "TEAM bios below are draft copy awaiting client approval.",
     photography: "SVG illustrations in public/images/ are placeholders for client or licensed stock photography.",
+    vanPhoto: "public/images/wheelchair-accessible-van.svg is an illustration; replace with a photo of the client's own van (client sending photos).",
   },
 };
 

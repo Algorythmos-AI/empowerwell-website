@@ -17,6 +17,8 @@ export interface ServiceItem {
   features: string[];
   /** Shown on the home page as a featured support. */
   featured?: boolean;
+  /** Optional picture shown with the service. */
+  image?: { src: string; alt: string; caption: string };
 }
 
 export const SERVICES: ServiceItem[] = [
@@ -84,14 +86,20 @@ export const SERVICES: ServiceItem[] = [
     slug: "transport",
     title: "Transport & Travel Assistance",
     ndisGroup: "0108 Assist-Travel/Transport",
-    shortDescription: "Help to get to appointments, shops, work, study and social activities.",
-    fullDescription: "We help you get where you need to go, and can help you build the confidence to travel on your own.",
+    shortDescription: "Help to get to appointments, shops, work, study and social activities, including in our wheelchair-accessible van.",
+    fullDescription: "We help you get where you need to go. Our wheelchair-accessible van has a ramp, so you can travel in your own wheelchair. We can also help you build the confidence to travel on your own.",
     features: [
+      "Wheelchair-accessible van with a ramp",
       "Getting to medical and therapy appointments",
+      "Trips to the shops, work and social activities",
       "Learning to use buses and trains",
-      "Trips to the shops and social activities",
-      "Support on the journey, not just the ride",
     ],
+    featured: true,
+    image: {
+      src: "/images/wheelchair-accessible-van.svg",
+      alt: "Illustration of a wheelchair-accessible van with its rear ramp lowered",
+      caption: "Our wheelchair-accessible van has a ramp at the back.",
+    },
   },
   {
     id: "community-participation",
