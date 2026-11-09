@@ -46,6 +46,7 @@ const localBusinessSchema = {
   taxID: SITE.abn,
   address: {
     "@type": "PostalAddress",
+    streetAddress: SITE.streetAddress,
     addressLocality: SITE.suburb,
     addressRegion: SITE.state,
     postalCode: SITE.postcode,

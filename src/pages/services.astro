@@ -53,6 +53,12 @@ import { SERVICES } from "../content/services";
                   <h2 class="text-2xl font-bold text-ink">{service.title}</h2>
                   <p class="text-lg text-ink leading-relaxed">{service.shortDescription}</p>
                   <p class="text-base text-ink leading-relaxed">{service.fullDescription}</p>
+                  {service.image && (
+                    <figure class="rounded-[12px] overflow-hidden border border-green-100 bg-surface-tint">
+                      <img src={service.image.src} alt={service.image.alt} width="800" height="500" loading="lazy" class="w-full h-auto" />
+                      <figcaption class="px-4 py-3 text-base font-bold text-green-900 bg-white border-t border-green-100">{service.image.caption}</figcaption>
+                    </figure>
+                  )}
                   <div class="pt-1">
                     <h3 class="text-base font-bold text-green-900 mb-2">This can include:</h3>
                     <ul class="space-y-2 text-base text-ink" role="list">
