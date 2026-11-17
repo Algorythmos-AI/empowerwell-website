@@ -38,7 +38,7 @@ export const SITE = {
   email,
   emailHref: `mailto:${email}`,
   // Public origin from astro.config (site-url.mjs): the Vercel production domain, or the custom domain once attached.
-  websiteUrl: ((import.meta.env.SITE as string | undefined) ?? "https://empowerwell.com.au").replace(/\/$/, ""),
+  websiteUrl: ((import.meta.env.SITE as string | undefined) ?? "https://empowerwellsupport.com.au").replace(/\/$/, ""),
   streetAddress: "62 Eloura St",
   suburb: "Dharruk",
   state: "NSW",
@@ -90,8 +90,7 @@ export const SITE = {
    */
   PLACEHOLDERS: {
     phone: "0401 712 914 is from our client records; the business plan lists 0413 955 269. Confirm which is public.",
-    email: "info@empowerwell.com.au does not exist until the domain is registered and Zoho Mail is set up.",
-    domain: "https://empowerwell.com.au is the preferred domain; not registered yet.",
+    email: "URGENT: info@empowerwell.com.au is on a domain owned by another company. Switch to info@empowerwellsupport.com.au as soon as Zoho Mail is delivering.",
     socialUrls: "No Facebook; Instagram exists but the client wants a professional one set up first. null until then.",
     formEndpoint: "Set PUBLIC_FORM_ENDPOINT (Formspree / Web3Forms) in Vercel; until then the form opens a pre-filled email.",
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",

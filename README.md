@@ -4,9 +4,9 @@ Marketing and referral website for Empowerwell Support Pty Ltd, a registered NDI
 
 | | |
 |---|---|
-| **Status** | Preview live; awaiting client content and domain |
+| **Status** | Live on the client's domain; awaiting client content |
 | **Owner** | [@Algorythmos-AI/maintainers](https://github.com/orgs/Algorythmos-AI/teams/maintainers) |
-| **Runs at** | <https://empowerwell-website.vercel.app> (Vercel project `empowerwell-website`, deploys from `main`); target domain empowerwell.com.au |
+| **Runs at** | <https://empowerwellsupport.com.au> (Vercel project `empowerwell-website`, deploys from `main`; DNS on Cloudflare, DNS-only) |
 | **Run locally** | `npm ci && npm run dev` |
 | **Context** | [Org repository map](https://github.com/Algorythmos-AI/.github-private/blob/main/profile/README.md#repository-map) · [Glossary](https://github.com/Algorythmos-AI/.github-private/blob/main/docs/glossary.md) |
 
@@ -42,7 +42,7 @@ npm run preview   # serve the production build
 │   ├── favicon.ico, favicon-16/32.png, apple-touch-icon.png, icon-192/512.png   # generated from the logo
 │   ├── logo.png, og-image.png                                                  # generated from the logo
 │   └── images/                     # illustrated SVG placeholders, awaiting real photography
-├── site-url.mjs                    # public origin: SITE_URL → Vercel production domain → empowerwell.com.au
+├── site-url.mjs                    # public origin: SITE_URL → Vercel production domain → empowerwellsupport.com.au
 ├── scripts/
 │   ├── build-brand-assets.mjs      # regenerates every logo-derived asset (npm run brand-assets)
 │   └── verify-dist.mjs             # post-build spec checks (part of npm run check)
@@ -73,8 +73,8 @@ All business facts live in `src/content/`. Components never hard-code them (the 
 | Item | Current state |
 |---|---|
 | Phone | `0401 712 914`. The business plan lists `0413 955 269`; the client must confirm which is public |
-| Email | `info@empowerwell.com.au`. **Does not exist yet**: needs the domain and Zoho Mail |
-| Domain | `empowerwell.com.au` preferred; not registered |
+| Email | Moving to `info@empowerwellsupport.com.au` once Zoho Mail is live (the old `empowerwell.com.au` belongs to another company) |
+| Domain | `empowerwellsupport.com.au` (`www` redirects to it; `empowerwell-website.vercel.app` redirects to it) |
 | Form endpoint | `PUBLIC_FORM_ENDPOINT` unset; the form falls back to a pre-filled email |
 | Address | Suburb only (Dharruk NSW 2770) until the client approves the street address |
 | Social links | `null` (hidden) until supplied |
@@ -108,6 +108,16 @@ Cards use `rounded-[12px]`, buttons `rounded-full`, shadows `shadow-soft`.
 ## Deployment
 
 Vercel, static output from `dist/`. `vercel.json` sets HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, immutable caching for `/_astro/*`, and skips builds for docs-only commits. Set `PUBLIC_FORM_ENDPOINT` in the Vercel project before launch. `*.vercel.app` hosts send `X-Robots-Tag: noindex` so only the custom domain is indexed.
+
+### Domain and DNS
+
+| Host | Record (Cloudflare, **DNS only**) | Behaviour |
+|---|---|---|
+| `empowerwellsupport.com.au` | A `216.150.1.1`, A `216.150.16.1` | Production site; Let's Encrypt certificate issued and renewed by Vercel |
+| `www.empowerwellsupport.com.au` | CNAME `d10dbf4790a9ed68.vercel-dns-016.com` | 308 redirect to the apex (Vercel project domain setting) |
+| `empowerwell-website.vercel.app` | (Vercel) | 308 redirect to the apex (Vercel project domain setting) |
+
+Keep the Cloudflare records **DNS only** (grey cloud): proxying through Cloudflare would put a second CDN and TLS layer in front of Vercel and interfere with certificate renewal. The canonical origin comes from `VERCEL_PROJECT_PRODUCTION_URL` (see `site-url.mjs`), so a redeploy is needed after any domain change.
 
 ## Licence
 
