@@ -84,7 +84,7 @@ outcome falls back to a pre-filled email, and the UI must say it has not been se
 ## 3. Placeholders registry
 `SITE.PLACEHOLDERS` in `src/content/site.ts` is the authoritative list. Summary:
 - `SITE.phone`: `0401 712 914` (client to confirm against `0413 955 269` from the business plan)
-- `SITE.email`: `info@empowerwell.com.au` (domain and Zoho Mail not set up yet)
+- `SITE.email`: moving to `info@empowerwellsupport.com.au` once Zoho Mail delivers. Never use `empowerwell.com.au`: it belongs to another company.
 - `PUBLIC_FORM_ENDPOINT`: set in Vercel (Formspree / Web3Forms)
 - `SITE.socials`: `null` until supplied (hidden while null)
 - Photography and director photos: SVG placeholders in `public/images/`
