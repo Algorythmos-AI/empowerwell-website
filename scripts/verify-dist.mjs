@@ -117,6 +117,8 @@ for (const file of pages) {
   if (/https?:\/\/[^"'\s)]*(unsplash|picsum|placehold|placeholder\.com|loremflickr|pravatar|dummyimage)/i.test(html))
     fail(file, "references a remote placeholder image service");
   if (/9831\s?0000|0400\s?000\s?000|0298310000/.test(html)) fail(file, "contains a dummy phone number");
+  // empowerwell.com.au belongs to another company: never send visitors or enquiries there.
+  if (/empowerwell\.com\.au/i.test(html)) fail(file, "references empowerwell.com.au, a domain owned by another company");
   if (/\bTODO\b|Note for Directors|lorem ipsum/i.test(doc.querySelector("body")?.text ?? "")) fail(file, "visible TODO / placeholder note in page text");
   if (/action="mailto:/i.test(html)) fail(file, "form posts to mailto: (insecure; browsers flag it)");
 
