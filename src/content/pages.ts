@@ -16,7 +16,7 @@ export const PAGES = {
   about: {
     title: "About Us · Empowerwell Support",
     description:
-      "Meet Empowerwell Support Pty Ltd: our story, mission, vision and values, and our directors Aiwen Kuel and Lual Chol.",
+      "Meet Empowerwell Support Pty Ltd: our story, mission, vision and values, and our directors Aiwen Akot Kuel and Lual Chol.",
   },
   services: {
     title: "Our NDIS Services · Empowerwell Support",

@@ -19,7 +19,8 @@ export interface NavLink {
   label: string;
 }
 
-const phoneDisplay = "0401 712 914";
+// Work number confirmed by Lual Chol (email, 20 Nov 2026).
+const phoneDisplay = "0415 554 765";
 // Zoho Mail (Australian data centre). Mailboxes: info@, lual@, admin@, aiwen@.
 const email = "info@empowerwellsupport.com.au";
 
@@ -29,7 +30,7 @@ export const SITE = {
   tagline: "Empowering You to Thrive",
   ndisRegistration: "4-LCYP0SK",
   abn: "88 681 094 342",
-  directors: ["Aiwen Kuel", "Lual Chol"],
+  directors: ["Aiwen Akot Kuel", "Lual Chol"],
 
   // Contact & location. Street address approved for publication by the client (email, 8 Nov 2026).
   phone: phoneDisplay,
@@ -90,7 +91,6 @@ export const SITE = {
    * What still needs client input before launch. Keep this accurate: it is the audit list.
    */
   PLACEHOLDERS: {
-    phone: "0401 712 914 is from our client records; the business plan lists 0413 955 269. Confirm which is public.",
     socialUrls: "No Facebook; Instagram exists but the client wants a professional one set up first. null until then.",
     formEndpoint: "Set PUBLIC_FORM_ENDPOINT (Formspree / Web3Forms) in Vercel; until then the form opens a pre-filled email.",
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",
@@ -186,11 +186,11 @@ export const FOOTER = {
 
 export const TEAM: TeamMember[] = [
   {
-    name: "Aiwen Kuel",
+    name: "Aiwen Akot Kuel",
     role: "Director",
     bio: "Passionate about building inclusive communities and ensuring every person with disability has the voice, choice, and dedicated guidance they deserve.",
     image: "/images/team-aiwen-kuel.svg",
-    imageAlt: "Illustrated placeholder portrait for Aiwen Kuel, Director of Empowerwell Support",
+    imageAlt: "Illustrated placeholder portrait for Aiwen Akot Kuel, Director of Empowerwell Support",
   },
   {
     name: "Lual Chol",

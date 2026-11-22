@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-labelledby="t">
-  <title id="t">Illustration of a wheelchair-accessible van with its rear ramp lowered</title>
+  <title id="t">Illustration of a wheelchair-accessible van with its rear hoist lift lowered</title>
   <!-- PLACEHOLDER: replace with a photo of Empowerwell Support's own wheelchair-accessible van (see SITE.PLACEHOLDERS in src/content/site.ts) -->
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -36,9 +36,14 @@
     <path d="M285 274 A10 10 0 1 0 299 287"/>
   </g>
 
-  <!-- Rear ramp lowered -->
-  <path d="M120 350 L44 392 L60 392 L120 362 Z" fill="#B479C2" stroke="#622072" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M112 352 L112 196" stroke="#622072" stroke-width="5"/>
+  <!-- Rear platform hoist lift, lowered to the ground (SWL 350 kg) -->
+  <rect x="104" y="196" width="8" height="196" rx="3" fill="#622072"/>
+  <rect x="24" y="210" width="8" height="182" rx="3" fill="#622072"/>
+  <path d="M32 230 L104 230" stroke="#622072" stroke-width="4"/>
+  <rect x="18" y="378" width="96" height="12" rx="3" fill="#B479C2" stroke="#622072" stroke-width="3"/>
+  <path d="M28 378 L28 366 M104 378 L104 366" stroke="#622072" stroke-width="3"/>
+  <rect x="40" y="338" width="54" height="22" rx="5" fill="#FFFFFF" stroke="#622072" stroke-width="2.5"/>
+  <text x="67" y="354" text-anchor="middle" font-family="'Nunito', sans-serif" font-weight="800" font-size="13" fill="#622072">350 kg</text>
 
   <!-- Wheels -->
   <circle cx="210" cy="378" r="38" fill="#1F2A24"/>
@@ -46,5 +51,5 @@
   <circle cx="530" cy="378" r="38" fill="#1F2A24"/>
   <circle cx="530" cy="378" r="16" fill="#E1E8E3"/>
 
-  <text x="400" y="462" text-anchor="middle" font-family="'Nunito', sans-serif" font-weight="800" font-size="24" fill="#00613A">Wheelchair-accessible transport</text>
+  <text x="400" y="462" text-anchor="middle" font-family="'Nunito', sans-serif" font-weight="800" font-size="24" fill="#00613A">Wheelchair-accessible van with hoist lift</text>
 </svg>
