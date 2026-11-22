@@ -96,7 +96,7 @@ export const SITE = {
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",
     directorBios: "TEAM bios below are draft copy awaiting client approval.",
     photography: "Community photos (src/assets/photos) supplied by the client 20 Nov 2026; written consent from each person pictured must be on file. Remaining SVG illustrations (director portraits, van) await real photos.",
-    vanPhoto: "public/images/wheelchair-accessible-van.svg is an illustration; replace with a photo of the client's own van (client sending photos).",
+    vanPhoto: "src/assets/illustrations/wheelchair-accessible-van.svg is an illustration; replace with a photo of the client's own van (client sending photos).",
   },
 };
 
