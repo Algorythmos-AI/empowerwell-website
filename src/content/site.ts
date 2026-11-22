@@ -95,7 +95,7 @@ export const SITE = {
     formEndpoint: "Set PUBLIC_FORM_ENDPOINT (Formspree / Web3Forms) in Vercel; until then the form opens a pre-filled email.",
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",
     directorBios: "TEAM bios below are draft copy awaiting client approval.",
-    photography: "SVG illustrations in public/images/ are placeholders for client or licensed stock photography.",
+    photography: "Community photos (src/assets/photos) supplied by the client 20 Nov 2026; written consent from each person pictured must be on file. Remaining SVG illustrations (director portraits, van) await real photos.",
     vanPhoto: "public/images/wheelchair-accessible-van.svg is an illustration; replace with a photo of the client's own van (client sending photos).",
   },
 };
