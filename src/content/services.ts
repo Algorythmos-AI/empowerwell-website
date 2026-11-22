@@ -6,6 +6,10 @@
  * has not confirmed.
  */
 
+// Imported with ?url so the file name carries a content hash: a changed drawing gets a new URL
+// and is never served stale from browser caches.
+import vanIllustration from "../assets/illustrations/wheelchair-accessible-van.svg?url";
+
 export interface ServiceItem {
   id: string;
   slug: string;
@@ -96,7 +100,7 @@ export const SERVICES: ServiceItem[] = [
     ],
     featured: true,
     image: {
-      src: "/images/wheelchair-accessible-van.svg",
+      src: vanIllustration,
       alt: "Illustration of a wheelchair-accessible van with its rear hoist lift lowered",
       caption: "Our van has a rear hoist lift with a 350 kg safe working load.",
     },
