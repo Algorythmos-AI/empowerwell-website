@@ -87,9 +87,9 @@ export const SERVICES: ServiceItem[] = [
     title: "Transport & Travel Assistance",
     ndisGroup: "0108 Assist-Travel/Transport",
     shortDescription: "Help to get to appointments, shops, work, study and social activities, including in our wheelchair-accessible van.",
-    fullDescription: "We help you get where you need to go. Our wheelchair-accessible van has a ramp, so you can travel in your own wheelchair. We can also help you build the confidence to travel on your own.",
+    fullDescription: "We help you get where you need to go. Our wheelchair-accessible van has a hoist lift (safe working load 350 kg), so you can travel in your own wheelchair. We can also help you build the confidence to travel on your own.",
     features: [
-      "Wheelchair-accessible van with a ramp",
+      "Wheelchair-accessible van with a hoist lift (350 kg safe working load)",
       "Getting to medical and therapy appointments",
       "Trips to the shops, work and social activities",
       "Learning to use buses and trains",
@@ -97,8 +97,8 @@ export const SERVICES: ServiceItem[] = [
     featured: true,
     image: {
       src: "/images/wheelchair-accessible-van.svg",
-      alt: "Illustration of a wheelchair-accessible van with its rear ramp lowered",
-      caption: "Our wheelchair-accessible van has a ramp at the back.",
+      alt: "Illustration of a wheelchair-accessible van with its rear hoist lift lowered",
+      caption: "Our van has a rear hoist lift with a 350 kg safe working load.",
     },
   },
   {
