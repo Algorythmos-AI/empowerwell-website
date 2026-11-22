@@ -73,7 +73,7 @@ All business facts live in `src/content/`. Components never hard-code them (the 
 | Item | Current state |
 |---|---|
 | Phone | `0401 712 914`. The business plan lists `0413 955 269`; the client must confirm which is public |
-| Email | Moving to `info@empowerwellsupport.com.au` once Zoho Mail is live (the old `empowerwell.com.au` belongs to another company) |
+| Email | `info@empowerwellsupport.com.au` on Zoho Mail (AU data centre); mailboxes info@, lual@, admin@, aiwen@. The build fails on the old `empowerwell.com.au`, which belongs to another company |
 | Domain | `empowerwellsupport.com.au` (`www` redirects to it; `empowerwell-website.vercel.app` redirects to it) |
 | Form endpoint | `PUBLIC_FORM_ENDPOINT` unset; the form falls back to a pre-filled email |
 | Address | Suburb only (Dharruk NSW 2770) until the client approves the street address |

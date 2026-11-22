@@ -20,7 +20,8 @@ export interface NavLink {
 }
 
 const phoneDisplay = "0401 712 914";
-const email = "info@empowerwell.com.au";
+// Zoho Mail (Australian data centre). Mailboxes: info@, lual@, admin@, aiwen@.
+const email = "info@empowerwellsupport.com.au";
 
 export const SITE = {
   legalName: "Empowerwell Support Pty Ltd",
@@ -90,7 +91,6 @@ export const SITE = {
    */
   PLACEHOLDERS: {
     phone: "0401 712 914 is from our client records; the business plan lists 0413 955 269. Confirm which is public.",
-    email: "URGENT: info@empowerwell.com.au is on a domain owned by another company. Switch to info@empowerwellsupport.com.au as soon as Zoho Mail is delivering.",
     socialUrls: "No Facebook; Instagram exists but the client wants a professional one set up first. null until then.",
     formEndpoint: "Set PUBLIC_FORM_ENDPOINT (Formspree / Web3Forms) in Vercel; until then the form opens a pre-filled email.",
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",
