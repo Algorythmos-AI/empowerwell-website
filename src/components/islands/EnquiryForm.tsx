@@ -24,9 +24,11 @@ interface EnquiryFormProps {
   endpoint: string;
   phone: string;
   phoneHref: string;
+  phone2: string;
+  phone2Href: string;
 }
 
-export default function EnquiryForm({ services, recipient, endpoint, phone, phoneHref }: EnquiryFormProps) {
+export default function EnquiryForm({ services, recipient, endpoint, phone, phoneHref, phone2, phone2Href }: EnquiryFormProps) {
   const [formData, setFormData] = useState<EnquiryFormData>({
     fullName: "",
     phone: "",
@@ -200,6 +202,12 @@ export default function EnquiryForm({ services, recipient, endpoint, phone, phon
               className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full border-2 border-purple-700 text-purple-700 font-bold hover:bg-purple-50 transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
             >
               <span>Call {phone}</span>
+            </a>
+            <a
+              href={phone2Href}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full border-2 border-purple-700 text-purple-700 font-bold hover:bg-purple-50 transition-colors focus-visible:outline-3 focus-visible:outline-purple-700 focus-visible:outline-offset-2"
+            >
+              <span>Call {phone2}</span>
             </a>
           </div>
         )}

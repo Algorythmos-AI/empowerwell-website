@@ -37,8 +37,8 @@ export const PHOTOS = {
   },
   swimming: {
     src: swimming,
-    alt: "Two support workers helping a participant float in a swimming pool with flotation supports",
-    caption: "Swimming with support",
+    alt: "Two support workers helping a participant float in a hydrotherapy pool with flotation supports",
+    caption: "Hydrotherapy with support",
   },
 } satisfies Record<string, Photo>;
 

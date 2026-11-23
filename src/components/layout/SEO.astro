@@ -42,6 +42,13 @@ const localBusinessSchema = {
   logo: `${SITE.websiteUrl}/logo.png`,
   image: `${SITE.websiteUrl}/og-image.png`,
   telephone: SITE.phoneE164,
+  contactPoint: SITE.phones.map((p) => ({
+    "@type": "ContactPoint",
+    telephone: p.e164,
+    contactType: "customer service",
+    areaServed: "AU",
+    availableLanguage: "English",
+  })),
   email: SITE.email,
   taxID: SITE.abn,
   address: {
