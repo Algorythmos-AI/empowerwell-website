@@ -6,7 +6,7 @@
  * and a guaranteed fallback generating a prefilled mailto link.
  */
 
-import { FORM_EXAMPLES } from "../content/forms";
+import { FORM_EXAMPLES } from "../content/forms.js";
 
 /** Value used for the "feedback or complaint" choice (also selected by /contact?service=feedback). */
 export const FEEDBACK_OPTION = "Feedback or a complaint";
@@ -14,14 +14,14 @@ export const FEEDBACK_OPTION = "Feedback or a complaint";
 /** Longest message accepted; keeps the mailto fallback under common 2,000-character URL limits. */
 export const MESSAGE_MAX_LENGTH = 1200;
 
-const ROLE_LABELS: Record<string, string> = {
+export const ROLE_LABELS: Record<string, string> = {
   participant: "NDIS participant (for myself)",
   carer_family: "Family member or carer",
   support_coordinator: "Support coordinator or LAC",
   other: "Health professional, advocate or other",
 };
 
-const PLAN_LABELS: Record<string, string> = {
+export const PLAN_LABELS: Record<string, string> = {
   plan: "Plan-managed",
   self: "Self-managed",
   ndia: "Agency-managed (NDIA)",

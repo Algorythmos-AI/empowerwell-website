@@ -174,8 +174,8 @@ for (const file of sourceFiles) {
 }
 
 // ---------- Environment ----------
-if (!process.env.PUBLIC_FORM_ENDPOINT) {
-  warnings.push("PUBLIC_FORM_ENDPOINT is not set: the enquiry form will fall back to a pre-filled email.");
+if (!fs.existsSync(path.join(root, "api", "enquiry.ts"))) {
+  fail(path.join(root, "api", "enquiry.ts"), "the enquiry form endpoint function is missing");
 }
 
 for (const w of warnings) console.warn(`warn  ${w}`);

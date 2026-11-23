@@ -250,16 +250,15 @@ export default function EnquiryForm({ services, recipient, endpoint, phone, phon
 
   const errorEntries = Object.entries(errors).filter(([key, msg]) => key !== "general" && msg) as [string, string][];
 
-  // Without JavaScript: with an endpoint, the browser POSTs the form there (never a GET, which would put
-  // personal details in the URL). Without an endpoint the form is hidden (js-only) and the page's
-  // <noscript> block offers phone and email instead.
+  // The endpoint (api/enquiry.ts) accepts JSON only, so the form needs JavaScript: without it the form is
+  // hidden (js-only) and the page's <noscript> block offers phone and email. method="post" stays so an
+  // early submit can never fall back to a GET that would put personal details in the URL.
   return (
     <form
       onSubmit={handleSubmit}
       noValidate={hydrated}
       method="post"
-      action={endpoint || undefined}
-      className={`rounded-[12px] bg-white border border-border-card p-6 sm:p-10 shadow-soft${endpoint ? "" : " js-only"}`}
+      className="rounded-[12px] bg-white border border-border-card p-6 sm:p-10 shadow-soft js-only"
       aria-labelledby="enquiry-form-heading"
     >
       <p className="text-base text-ink mb-6">
