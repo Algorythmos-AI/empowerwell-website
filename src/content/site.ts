@@ -19,8 +19,11 @@ export interface NavLink {
   label: string;
 }
 
-// Work number confirmed by Lual Chol (email, 20 Nov 2026).
+// Work numbers. Main: confirmed by Lual Chol (email, 20 Nov 2026).
+// Second: added by Lual Chol in a meeting with Algorythmos (Nov 2026), "two numbers for work".
 const phoneDisplay = "0415 554 765";
+const phone2Display = "0406 803 287";
+const toE164 = (display: string) => `+61${display.replace(/\s/g, "").replace(/^0/, "")}`;
 // Zoho Mail (Australian data centre). Mailboxes: info@, lual@, admin@, aiwen@.
 const email = "info@empowerwellsupport.com.au";
 
@@ -36,6 +39,14 @@ export const SITE = {
   phone: phoneDisplay,
   phoneHref: `tel:+61${phoneDisplay.replace(/\s/g, "").replace(/^0/, "")}`,
   phoneE164: `+61${phoneDisplay.replace(/\s/g, "").replace(/^0/, "")}`,
+  phone2: phone2Display,
+  phone2Href: `tel:${toE164(phone2Display)}`,
+  phone2E164: toE164(phone2Display),
+  /** Both work numbers, main first. */
+  phones: [
+    { display: phoneDisplay, href: `tel:${toE164(phoneDisplay)}`, e164: toE164(phoneDisplay) },
+    { display: phone2Display, href: `tel:${toE164(phone2Display)}`, e164: toE164(phone2Display) },
+  ],
   phoneLabel: "Call or text",
   email,
   emailHref: `mailto:${email}`,

@@ -83,7 +83,7 @@ outcome falls back to a pre-filled email, and the UI must say it has not been se
 
 ## 3. Placeholders registry
 `SITE.PLACEHOLDERS` in `src/content/site.ts` is the authoritative list. Summary:
-- `SITE.phone`: `0401 712 914` (client to confirm against `0413 955 269` from the business plan)
+- `SITE.phone` / `SITE.phone2`: `0415 554 765` (main) and `0406 803 287` (second work number). Both are shown wherever a call option appears, except the compact header icon (main only).
 - `SITE.email`: `info@empowerwellsupport.com.au` (Zoho Mail, AU data centre). Never use `empowerwell.com.au`: it belongs to another company, and `verify-dist` fails the build if it appears.
 - `PUBLIC_FORM_ENDPOINT`: set in Vercel (Formspree / Web3Forms)
 - `SITE.socials`: `null` until supplied (hidden while null)
