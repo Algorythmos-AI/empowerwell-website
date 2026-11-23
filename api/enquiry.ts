@@ -1,10 +1,13 @@
 /**
  * POST /api/enquiry — the website enquiry form posts here (Vercel Function, Node.js runtime).
  *
- * Emails each enquiry to the business inbox through Zoho Mail's Australian SMTP server.
+ * Emails each enquiry to the business inbox through Zoho Mail's Australian SMTP server for
+ * organisation (custom-domain) mailboxes, smtppro.zoho.com.au. The personal-account server
+ * (smtp.zoho.com.au) rejects these mailboxes with EAUTH.
  * Environment variables (Vercel → Project → Settings → Environment Variables, Production):
  *   ZOHO_SMTP_USER      the Zoho mailbox that signs in (lual.chol@empowerwellsupport.com.au)
  *   ZOHO_SMTP_PASSWORD  a Zoho *app-specific* password for that mailbox (never the login password)
+ *   ZOHO_SMTP_HOST      optional; SMTP server (default smtppro.zoho.com.au)
  *   ENQUIRY_TO          optional; inbox that receives enquiries (default info@)
  *   ENQUIRY_FROM        optional; sender address, must be the mailbox or one of its aliases (default info@)
  * Without the first two, the function answers 503 and the form falls back to a pre-filled email.
@@ -16,7 +19,7 @@ const user = process.env.ZOHO_SMTP_USER ?? "";
 const pass = process.env.ZOHO_SMTP_PASSWORD ?? "";
 
 const transport = nodemailer.createTransport({
-  host: process.env.ZOHO_SMTP_HOST || "smtp.zoho.com.au",
+  host: process.env.ZOHO_SMTP_HOST || "smtppro.zoho.com.au",
   port: 465,
   secure: true,
   auth: { user, pass },

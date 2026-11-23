@@ -86,8 +86,8 @@ outcome falls back to a pre-filled email, and the UI must say it has not been se
 - `SITE.phone` / `SITE.phone2`: `0415 554 765` (main) and `0406 803 287` (second work number). Both are shown wherever a call option appears, except the compact header icon (main only).
 - `SITE.email`: `info@empowerwellsupport.com.au` (Zoho Mail, AU data centre). Never use `empowerwell.com.au`: it belongs to another company, and `verify-dist` fails the build if it appears.
 - Enquiry form: `api/enquiry.ts` (Vercel Function) emails each enquiry to info@ through Zoho SMTP
-  (`smtp.zoho.com.au`). Needs `ZOHO_SMTP_USER` and `ZOHO_SMTP_PASSWORD` (a Zoho app-specific password)
-  in Vercel. Without them it returns 503 and the form falls back to a pre-filled email. Logic and tests
+  (`smtppro.zoho.com.au`, the server for organisation mailboxes; `smtp.zoho.com.au` fails with EAUTH). Needs `ZOHO_SMTP_USER` and `ZOHO_SMTP_PASSWORD` (a Zoho app-specific password)
+  in Vercel. Vercel does not rebuild when a variable changes, so run a production deploy afterwards. Without them it returns 503 and the form falls back to a pre-filled email. Logic and tests
   live in `src/lib/enquiryHandler.ts`; never log personal details. Imports in that chain keep `.js`
   extensions because Vercel runs the function as a native ES module.
 - `SITE.socials`: `null` until supplied (hidden while null)
