@@ -8,7 +8,7 @@
  * - Alt text and captions describe the activity, never a person's name, diagnosis or exact location.
  */
 import type { ImageMetadata } from "astro";
-import communityWalk from "../assets/photos/community-walk.jpg";
+import shoppingCentreOuting from "../assets/photos/shopping-centre-outing.jpg";
 import communityOuting from "../assets/photos/community-outing.jpg";
 import cafeOuting from "../assets/photos/cafe-outing.jpg";
 import swimming from "../assets/photos/swimming.jpg";
@@ -20,10 +20,10 @@ export interface Photo {
 }
 
 export const PHOTOS = {
-  communityWalk: {
-    src: communityWalk,
-    alt: "Two smiling support workers on an outdoor walk with a participant who uses a wheelchair",
-    caption: "Getting out and about together",
+  shoppingCentreOuting: {
+    src: shoppingCentreOuting,
+    alt: "A smiling support worker and a participant enjoying cold drinks together at a shopping centre food court",
+    caption: "A drink and a chat at the shops",
   },
   communityOuting: {
     src: communityOuting,
