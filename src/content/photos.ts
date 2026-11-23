@@ -22,8 +22,8 @@ export interface Photo {
 export const PHOTOS = {
   shoppingCentreOuting: {
     src: shoppingCentreOuting,
-    alt: "A smiling support worker and a participant enjoying cold drinks together at a shopping centre food court",
-    caption: "A drink and a chat at the shops",
+    alt: "Two smiling women out together at a local shopping centre, one holding a cold drink",
+    caption: "Out and about at the shops",
   },
   communityOuting: {
     src: communityOuting,
