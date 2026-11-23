@@ -60,9 +60,9 @@ Org-wide rules (branching, commits, catalog) are in `Algorythmos-AI/.github-priv
 - Semantic landmarks (`<header>`, `<main id="main-content">`, `<footer>`, labelled `<nav>`s).
 - Every image has meaningful `alt` text (or `alt=""` when decorative), plus `width` and `height`.
 - Must work at 400% zoom (320px wide) and **without JavaScript**: the `<noscript>` nav in
-  `Header.astro`, `js-only` on JS-dependent controls. The enquiry form POSTs to the endpoint when one
-  is set (never a GET, which would put personal details in the URL); without an endpoint it is
-  `js-only` and the page's `<noscript>` gives phone and email. Never use a `mailto:` form action.
+  `Header.astro`, `js-only` on JS-dependent controls. The enquiry form is `js-only`: it POSTs JSON to
+  `/api/enquiry` (never a GET, which would put personal details in the URL), and the page's
+  `<noscript>` gives phone and email. Never use a `mailto:` form action.
 - Minimum text size is 15px (`text-xs` is redefined in `@theme`); body copy is `text-base` or larger.
 - Plain English for people with intellectual disability: short sentences, everyday words, explain
   NDIS terms the first time they appear. Australian spelling.
@@ -85,7 +85,11 @@ outcome falls back to a pre-filled email, and the UI must say it has not been se
 `SITE.PLACEHOLDERS` in `src/content/site.ts` is the authoritative list. Summary:
 - `SITE.phone` / `SITE.phone2`: `0415 554 765` (main) and `0406 803 287` (second work number). Both are shown wherever a call option appears, except the compact header icon (main only).
 - `SITE.email`: `info@empowerwellsupport.com.au` (Zoho Mail, AU data centre). Never use `empowerwell.com.au`: it belongs to another company, and `verify-dist` fails the build if it appears.
-- `PUBLIC_FORM_ENDPOINT`: set in Vercel (Formspree / Web3Forms)
+- Enquiry form: `api/enquiry.ts` (Vercel Function) emails each enquiry to info@ through Zoho SMTP
+  (`smtp.zoho.com.au`). Needs `ZOHO_SMTP_USER` and `ZOHO_SMTP_PASSWORD` (a Zoho app-specific password)
+  in Vercel. Without them it returns 503 and the form falls back to a pre-filled email. Logic and tests
+  live in `src/lib/enquiryHandler.ts`; never log personal details. Imports in that chain keep `.js`
+  extensions because Vercel runs the function as a native ES module.
 - `SITE.socials`: `null` until supplied (hidden while null)
 - Photography and director photos: SVG placeholders in `public/images/`
 - Logo: `src/assets/brand/logo-source.png` (500×500 PNG). Regenerate derived assets with

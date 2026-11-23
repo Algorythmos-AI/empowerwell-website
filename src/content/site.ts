@@ -14,6 +14,8 @@ export interface TeamMember {
   imageAlt: string;
 }
 
+import { BUSINESS_EMAIL } from "./contact";
+
 export interface NavLink {
   href: string;
   label: string;
@@ -25,7 +27,7 @@ const phoneDisplay = "0415 554 765";
 const phone2Display = "0406 803 287";
 const toE164 = (display: string) => `+61${display.replace(/\s/g, "").replace(/^0/, "")}`;
 // Zoho Mail (Australian data centre). Mailboxes: info@, lual@, admin@, aiwen@.
-const email = "info@empowerwellsupport.com.au";
+const email = BUSINESS_EMAIL;
 
 export const SITE = {
   legalName: "Empowerwell Support Pty Ltd",
@@ -96,14 +98,15 @@ export const SITE = {
   oaicPhoneHref: "tel:1300363992",
 
   // Form submission endpoint (Formspree / Web3Forms / custom). Empty = mailto fallback.
-  formEndpoint: (import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined) || "",
+  // Our own Vercel function (api/enquiry.ts) emails enquiries through Zoho. Override only for testing.
+  formEndpoint: (import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined) || "/api/enquiry",
 
   /**
    * What still needs client input before launch. Keep this accurate: it is the audit list.
    */
   PLACEHOLDERS: {
     socialUrls: "No Facebook; Instagram exists but the client wants a professional one set up first. null until then.",
-    formEndpoint: "Set PUBLIC_FORM_ENDPOINT (Formspree / Web3Forms) in Vercel; until then the form opens a pre-filled email.",
+    formEndpoint: "api/enquiry.ts sends through Zoho. Needs ZOHO_SMTP_USER and ZOHO_SMTP_PASSWORD (app password) in Vercel; without them the form falls back to a pre-filled email.",
     directorPhotos: "public/images/team-aiwen-kuel.svg & public/images/team-lual-chol.svg are illustrated placeholders.",
     directorBios: "TEAM bios below are draft copy awaiting client approval.",
     photography: "Community photos (src/assets/photos) supplied by the client 20 Nov 2026; written consent from each person pictured must be on file. Remaining SVG illustrations (director portraits, van) await real photos.",
